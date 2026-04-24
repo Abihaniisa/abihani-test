@@ -8,13 +8,18 @@
 <body>
     <div id="debug">Step 0: Page loaded</div>
     
-    <!-- Product Display -->
     <h3>All Products</h3>
     <div id="product-list">LOADING PRODUCTS...</div>
     
     <hr>
     
-    <!-- Login / Admin Section -->
+    <!-- Custom Order Section -->
+    <h3>Custom Order</h3>
+    <div id="custom-order-form"></div>
+    <div id="custom-order-status"></div>
+    
+    <hr>
+    
     <div id="admin-section">
         <p id="login-status">Not logged in</p>
         <button id="show-login-btn" onclick="showLoginForm()">Admin Login</button>
@@ -30,28 +35,140 @@
             <p id="admin-welcome"></p>
             <button onclick="doLogout()">Logout</button>
             <hr>
+            
+            <!-- WhatsApp Number Setting -->
+            <h4>Settings</h4>
+            <label>WhatsApp Number:</label>
+            <input type="text" id="whatsapp-number" placeholder="07067551684"><br>
+            <button onclick="saveWhatsAppNumber()">Save Number</button>
+            <p id="settings-status"></p>
+            
+            <hr>
+            
+            <!-- Add Product -->
             <h4>Add New Product</h4>
             <input type="text" id="product-name" placeholder="Product name"><br>
             <input type="number" id="product-price" placeholder="Price (₦)"><br>
+            <select id="product-category">
+                <option value="">Select category</option>
+                <option value="Shoes">Shoes</option>
+                <option value="Bags">Bags</option>
+                <option value="Belts">Belts</option>
+                <option value="Wallets">Wallets</option>
+                <option value="Accessories">Accessories</option>
+            </select><br>
             <input type="file" id="image-picker" accept="image/*"><br>
             <button onclick="uploadNewProduct()">+ Add Product</button>
             <p id="upload-status"></p>
+            
+            <hr>
+            
+            <!-- Custom Order Fields Editor -->
+            <h4>Custom Order Fields</h4>
+            <p>Current fields: <span id="current-fields"></span></p>
+            <input type="text" id="new-field-name" placeholder="New field name (e.g. phone)">
+            <button onclick="addCustomField()">+ Add Field</button>
+            <button onclick="removeCustomField()">- Remove Last Field</button>
+            <p id="fields-status"></p>
         </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
     <script>
-        // === CONFIG ===
         var supabaseUrl = 'https://eljgjxoptjxwdpuvzkpp.supabase.co';
         var supabaseKey = 'sb_publishable_RYlO1vwmzFViNl_68dDQ3Q_IfsRPIxZ';
         var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
         
         var isLoggedIn = false;
         var currentUser = null;
+        var whatsappNumber = '07067551684';
+        var customFields = ['name', 'description'];
 
-        document.getElementById('debug').textContent = 'Step 1: Supabase ready';
+        // === LOAD SETTINGS ===
+        async function loadSettings() {
+            var result = await supabase.from('site_settings').select('*').eq('id', 1).single();
+            if (result.data) {
+                whatsappNumber = result.data.whatsapp_number || '07067551684';
+                document.getElementById('whatsapp-number').value = whatsappNumber;
+                
+                if (result.data.custom_order_fields) {
+                    customFields = result.data.custom_order_fields.split(',').map(function(f) { return f.trim(); });
+                }
+                document.getElementById('current-fields').textContent = customFields.join(', ');
+            }
+            renderCustomOrderForm();
+        }
+        loadSettings();
 
-        // === LOAD ALL PRODUCTS ===
+        // === CUSTOM ORDER FORM ===
+        function renderCustomOrderForm() {
+            var html = '';
+            for (var i = 0; i < customFields.length; i++) {
+                var field = customFields[i];
+                var placeholder = field === 'name' ? 'Enter your full name' : (field === 'description' ? 'Describe what you want...' : 'Enter ' + field);
+                html += '<label>' + field + '</label><br>';
+                html += '<input type="text" id="custom-' + field + '" placeholder="' + placeholder + '" style="width:100%;margin-bottom:8px;"><br>';
+            }
+            html += '<button onclick="submitCustomOrder()">Send Order via WhatsApp</button>';
+            document.getElementById('custom-order-form').innerHTML = html;
+        }
+
+        async function submitCustomOrder() {
+            var message = 'Custom Order:%0A';
+            for (var i = 0; i < customFields.length; i++) {
+                var field = customFields[i];
+                var value = document.getElementById('custom-' + field).value || '';
+                message += field + ': ' + value + '%0A';
+            }
+            window.open('https://wa.me/' + whatsappNumber.replace('+', '') + '?text=' + message, '_blank');
+        }
+
+        // === SAVE WHATSAPP NUMBER ===
+        async function saveWhatsAppNumber() {
+            var newNumber = document.getElementById('whatsapp-number').value.trim();
+            if (!newNumber) {
+                document.getElementById('settings-status').textContent = 'Enter a number';
+                return;
+            }
+            var updateResult = await supabase.from('site_settings').update({ whatsapp_number: newNumber }).eq('id', 1);
+            if (updateResult.error) {
+                document.getElementById('settings-status').textContent = 'Error: ' + updateResult.error.message;
+                return;
+            }
+            whatsappNumber = newNumber;
+            document.getElementById('settings-status').textContent = 'Saved!';
+        }
+
+        // === ADD/REMOVE CUSTOM FIELDS ===
+        async function addCustomField() {
+            var newField = document.getElementById('new-field-name').value.trim().toLowerCase();
+            if (!newField) {
+                document.getElementById('fields-status').textContent = 'Enter a field name';
+                return;
+            }
+            customFields.push(newField);
+            var fieldsString = customFields.join(',');
+            await supabase.from('site_settings').update({ custom_order_fields: fieldsString }).eq('id', 1);
+            document.getElementById('current-fields').textContent = fieldsString;
+            document.getElementById('new-field-name').value = '';
+            document.getElementById('fields-status').textContent = 'Field added!';
+            renderCustomOrderForm();
+        }
+
+        async function removeCustomField() {
+            if (customFields.length <= 1) {
+                document.getElementById('fields-status').textContent = 'Must have at least 1 field';
+                return;
+            }
+            customFields.pop();
+            var fieldsString = customFields.join(',');
+            await supabase.from('site_settings').update({ custom_order_fields: fieldsString }).eq('id', 1);
+            document.getElementById('current-fields').textContent = fieldsString;
+            document.getElementById('fields-status').textContent = 'Last field removed!';
+            renderCustomOrderForm();
+        }
+
+        // === LOAD PRODUCTS ===
         async function loadProducts() {
             try {
                 var result = await supabase
@@ -80,12 +197,14 @@
                     
                     html += '<div style="border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:8px;">' +
                         '<strong>#' + p.id + ' - ' + p.name + '</strong>' +
+                        '<p>Category: ' + (p.category || 'Uncategorized') + '</p>' +
                         '<p>Price: ₦' + (p.price || 'N/A') + '</p>' +
-                        imageHtml;
+                        imageHtml +
+                        '<br>' +
+                        '<button onclick="buyNow(\'' + p.name + '\', ' + p.price + ')" style="background:#25D366;color:white;border:none;padding:8px 12px;border-radius:4px;margin-top:5px;">Buy Now via WhatsApp</button>';
                     
-                    // Add delete button if logged in
                     if (isLoggedIn) {
-                        html += '<br><button onclick="deleteProduct(' + p.id + ')" style="background:red;color:white;border:none;padding:5px 10px;border-radius:4px;margin-top:5px;">Delete</button>';
+                        html += ' <button onclick="deleteProduct(' + p.id + ')" style="background:red;color:white;border:none;padding:8px 12px;border-radius:4px;margin-top:5px;">Delete</button>';
                     }
                     
                     html += '</div>';
@@ -99,22 +218,10 @@
 
         loadProducts();
 
-        // === DELETE PRODUCT (works on ANY product, including #1) ===
-        async function deleteProduct(productId) {
-            if (!confirm('Delete product #' + productId + '?')) return;
-            
-            var result = await supabase
-                .from('products')
-                .delete()
-                .eq('id', productId);
-            
-            if (result.error) {
-                alert('Delete error: ' + result.error.message);
-                return;
-            }
-            
-            // Reload the list
-            loadProducts();
+        // === BUY NOW ===
+        function buyNow(productName, productPrice) {
+            var message = 'Hi Abihani Express! I want to buy: ' + productName + ' (₦' + (productPrice || 'N/A') + ')';
+            window.open('https://wa.me/' + whatsappNumber.replace('+', '') + '?text=' + encodeURIComponent(message), '_blank');
         }
 
         // === CHECK SESSION ===
@@ -124,12 +231,11 @@
                 isLoggedIn = true;
                 currentUser = sessionResult.data.session.user;
                 showAdminPanel();
-                loadProducts(); // Reload to show delete buttons
+                loadProducts();
             }
         }
         checkSession();
 
-        // === LOGIN ===
         function showLoginForm() {
             document.getElementById('login-form').style.display = 'block';
             document.getElementById('show-login-btn').style.display = 'none';
@@ -139,21 +245,14 @@
             var email = document.getElementById('login-email').value;
             var password = document.getElementById('login-password').value;
             
-            var authResult = await supabase.auth.signInWithPassword({
-                email: email,
-                password: password
-            });
+            var authResult = await supabase.auth.signInWithPassword({ email: email, password: password });
 
             if (authResult.error) {
                 document.getElementById('login-error').textContent = 'Login failed: ' + authResult.error.message;
                 return;
             }
 
-            var adminCheck = await supabase
-                .from('admins')
-                .select('*')
-                .eq('email', email)
-                .single();
+            var adminCheck = await supabase.from('admins').select('*').eq('email', email).single();
 
             if (adminCheck.error || !adminCheck.data) {
                 document.getElementById('login-error').textContent = 'Not an admin account';
@@ -164,7 +263,7 @@
             isLoggedIn = true;
             currentUser = authResult.data.user;
             showAdminPanel();
-            loadProducts(); // Reload to show delete buttons
+            loadProducts();
         }
 
         function showAdminPanel() {
@@ -184,13 +283,14 @@
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('login-status').textContent = 'Not logged in';
             document.getElementById('login-password').value = '';
-            loadProducts(); // Reload to hide delete buttons
+            loadProducts();
         }
 
-        // === UPLOAD NEW PRODUCT ===
+        // === UPLOAD PRODUCT ===
         async function uploadNewProduct() {
             var name = document.getElementById('product-name').value.trim();
             var price = document.getElementById('product-price').value;
+            var category = document.getElementById('product-category').value;
             var fileInput = document.getElementById('image-picker');
             var file = fileInput.files[0];
             
@@ -206,7 +306,6 @@
             document.getElementById('upload-status').textContent = 'Uploading...';
 
             try {
-                // Upload image
                 var fileExt = file.name.split('.').pop();
                 var fileName = 'products/' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + fileExt;
                 var uploadResult = await supabase.storage.from('images').upload(fileName, file);
@@ -216,18 +315,15 @@
                     return;
                 }
 
-                // Get URL
                 var urlResult = supabase.storage.from('images').getPublicUrl(fileName);
                 var publicUrl = urlResult.data.publicUrl;
 
-                // INSERT new row
-                var insertResult = await supabase
-                    .from('products')
-                    .insert([{
-                        name: name,
-                        price: price ? parseInt(price) : 0,
-                        image_url: publicUrl
-                    }]);
+                var insertResult = await supabase.from('products').insert([{
+                    name: name,
+                    price: price ? parseInt(price) : 0,
+                    category: category || 'Uncategorized',
+                    image_url: publicUrl
+                }]);
 
                 if (insertResult.error) {
                     document.getElementById('upload-status').textContent = 'Insert error: ' + insertResult.error.message;
@@ -235,18 +331,21 @@
                 }
 
                 document.getElementById('upload-status').textContent = 'Product added!';
-                
-                // Clear form
                 document.getElementById('product-name').value = '';
                 document.getElementById('product-price').value = '';
                 document.getElementById('image-picker').value = '';
-                
-                // Reload product list
                 loadProducts();
 
             } catch(e) {
                 document.getElementById('upload-status').textContent = 'Crash: ' + e.message;
             }
+        }
+
+        // === DELETE PRODUCT ===
+        async function deleteProduct(productId) {
+            if (!confirm('Delete product #' + productId + '?')) return;
+            await supabase.from('products').delete().eq('id', productId);
+            loadProducts();
         }
     </script>
 </body>
