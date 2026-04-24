@@ -3,20 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abihani Express - Admin Test</title>
+    <title>Abihani Express - Status Share Test</title>
+    <style>
+        :root {
+            --accent: #b76e3c;
+        }
+        body {
+            font-family: sans-serif;
+            padding: 10px;
+        }
+        button {
+            background: var(--accent);
+            color: white;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin: 3px 0;
+        }
+        button:hover {
+            filter: brightness(1.1);
+        }
+        h3, h4 {
+            color: var(--accent);
+        }
+        .btn-wa {
+            background: #25D366;
+        }
+        .btn-status {
+            background: #128C7E;
+        }
+        .btn-delete {
+            background: #e74c3c;
+        }
+        .product-card {
+            border: 1px solid #ccc;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .admin-badge {
+            display: inline-block;
+            background: var(--accent);
+            color: white;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 11px;
+            margin-left: 6px;
+        }
+        #status-preview {
+            background: #dcf8c6;
+            padding: 12px;
+            border-radius: 8px;
+            margin: 10px 0;
+            display: none;
+            font-size: 14px;
+            max-width: 300px;
+            position: relative;
+        }
+        #status-preview:before {
+            content: 'Status Preview';
+            position: absolute;
+            top: -10px;
+            left: 10px;
+            background: #128C7E;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+        }
+    </style>
 </head>
 <body>
-    <div id="debug">Step 0: Page loaded</div>
+    <h3>Abihani Express - Admin Status Share</h3>
     
-    <h3>All Products</h3>
     <div id="product-list">LOADING PRODUCTS...</div>
-    
-    <hr>
-    
-    <!-- Custom Order Section -->
-    <h3>Custom Order</h3>
-    <div id="custom-order-form"></div>
-    <div id="custom-order-status"></div>
     
     <hr>
     
@@ -35,41 +96,16 @@
             <p id="admin-welcome"></p>
             <button onclick="doLogout()">Logout</button>
             <hr>
+            <h4>Share to WhatsApp Status</h4>
+            <p>Click <b>"Share to Status"</b> on any product below. A popup will show you what the status will look like. Then click send.</p>
             
-            <!-- WhatsApp Number Setting -->
-            <h4>Settings</h4>
-            <label>WhatsApp Number:</label>
-            <input type="text" id="whatsapp-number" placeholder="07067551684"><br>
-            <button onclick="saveWhatsAppNumber()">Save Number</button>
-            <p id="settings-status"></p>
-            
-            <hr>
-            
-            <!-- Add Product -->
-            <h4>Add New Product</h4>
-            <input type="text" id="product-name" placeholder="Product name"><br>
-            <input type="number" id="product-price" placeholder="Price (₦)"><br>
-            <select id="product-category">
-                <option value="">Select category</option>
-                <option value="Shoes">Shoes</option>
-                <option value="Bags">Bags</option>
-                <option value="Belts">Belts</option>
-                <option value="Wallets">Wallets</option>
-                <option value="Accessories">Accessories</option>
-            </select><br>
-            <input type="file" id="image-picker" accept="image/*"><br>
-            <button onclick="uploadNewProduct()">+ Add Product</button>
-            <p id="upload-status"></p>
-            
-            <hr>
-            
-            <!-- Custom Order Fields Editor -->
-            <h4>Custom Order Fields</h4>
-            <p>Current fields: <span id="current-fields"></span></p>
-            <input type="text" id="new-field-name" placeholder="New field name (e.g. phone)">
-            <button onclick="addCustomField()">+ Add Field</button>
-            <button onclick="removeCustomField()">- Remove Last Field</button>
-            <p id="fields-status"></p>
+            <!-- Status Preview Box -->
+            <div id="status-preview">
+                <p id="status-text"></p>
+                <small id="status-link"></small>
+            </div>
+            <button id="status-send-btn" class="btn-status" onclick="sendToStatus()" style="display:none;">📤 Send to My Status</button>
+            <button id="status-cancel-btn" class="btn-delete" onclick="cancelStatus()" style="display:none;">Cancel</button>
         </div>
     </div>
 
@@ -81,147 +117,112 @@
         
         var isLoggedIn = false;
         var currentUser = null;
-        var whatsappNumber = '07067551684';
-        var customFields = ['name', 'description'];
-
-        // === LOAD SETTINGS ===
-        async function loadSettings() {
-            var result = await supabase.from('site_settings').select('*').eq('id', 1).single();
-            if (result.data) {
-                whatsappNumber = result.data.whatsapp_number || '07067551684';
-                document.getElementById('whatsapp-number').value = whatsappNumber;
-                
-                if (result.data.custom_order_fields) {
-                    customFields = result.data.custom_order_fields.split(',').map(function(f) { return f.trim(); });
-                }
-                document.getElementById('current-fields').textContent = customFields.join(', ');
-            }
-            renderCustomOrderForm();
-        }
-        loadSettings();
-
-        // === CUSTOM ORDER FORM ===
-        function renderCustomOrderForm() {
-            var html = '';
-            for (var i = 0; i < customFields.length; i++) {
-                var field = customFields[i];
-                var placeholder = field === 'name' ? 'Enter your full name' : (field === 'description' ? 'Describe what you want...' : 'Enter ' + field);
-                html += '<label>' + field + '</label><br>';
-                html += '<input type="text" id="custom-' + field + '" placeholder="' + placeholder + '" style="width:100%;margin-bottom:8px;"><br>';
-            }
-            html += '<button onclick="submitCustomOrder()">Send Order via WhatsApp</button>';
-            document.getElementById('custom-order-form').innerHTML = html;
-        }
-
-        async function submitCustomOrder() {
-            var message = 'Custom Order:%0A';
-            for (var i = 0; i < customFields.length; i++) {
-                var field = customFields[i];
-                var value = document.getElementById('custom-' + field).value || '';
-                message += field + ': ' + value + '%0A';
-            }
-            window.open('https://wa.me/' + whatsappNumber.replace('+', '') + '?text=' + message, '_blank');
-        }
-
-        // === SAVE WHATSAPP NUMBER ===
-        async function saveWhatsAppNumber() {
-            var newNumber = document.getElementById('whatsapp-number').value.trim();
-            if (!newNumber) {
-                document.getElementById('settings-status').textContent = 'Enter a number';
-                return;
-            }
-            var updateResult = await supabase.from('site_settings').update({ whatsapp_number: newNumber }).eq('id', 1);
-            if (updateResult.error) {
-                document.getElementById('settings-status').textContent = 'Error: ' + updateResult.error.message;
-                return;
-            }
-            whatsappNumber = newNumber;
-            document.getElementById('settings-status').textContent = 'Saved!';
-        }
-
-        // === ADD/REMOVE CUSTOM FIELDS ===
-        async function addCustomField() {
-            var newField = document.getElementById('new-field-name').value.trim().toLowerCase();
-            if (!newField) {
-                document.getElementById('fields-status').textContent = 'Enter a field name';
-                return;
-            }
-            customFields.push(newField);
-            var fieldsString = customFields.join(',');
-            await supabase.from('site_settings').update({ custom_order_fields: fieldsString }).eq('id', 1);
-            document.getElementById('current-fields').textContent = fieldsString;
-            document.getElementById('new-field-name').value = '';
-            document.getElementById('fields-status').textContent = 'Field added!';
-            renderCustomOrderForm();
-        }
-
-        async function removeCustomField() {
-            if (customFields.length <= 1) {
-                document.getElementById('fields-status').textContent = 'Must have at least 1 field';
-                return;
-            }
-            customFields.pop();
-            var fieldsString = customFields.join(',');
-            await supabase.from('site_settings').update({ custom_order_fields: fieldsString }).eq('id', 1);
-            document.getElementById('current-fields').textContent = fieldsString;
-            document.getElementById('fields-status').textContent = 'Last field removed!';
-            renderCustomOrderForm();
-        }
+        var statusProduct = null;
+        var currentDomain = window.location.origin;
 
         // === LOAD PRODUCTS ===
         async function loadProducts() {
-            try {
-                var result = await supabase
-                    .from('products')
-                    .select('*')
-                    .order('id', { ascending: false });
+            var result = await supabase.from('products').select('*').order('id', { ascending: false });
 
-                if (result.error) {
-                    document.getElementById('product-list').textContent = 'Error: ' + result.error.message;
-                    return;
-                }
-
-                var products = result.data;
-                
-                if (!products || products.length === 0) {
-                    document.getElementById('product-list').textContent = 'No products yet.';
-                    return;
-                }
-
-                var html = '';
-                for (var i = 0; i < products.length; i++) {
-                    var p = products[i];
-                    var imageHtml = p.image_url 
-                        ? '<img src="' + p.image_url + '" alt="' + p.name + '" style="max-width:200px;border-radius:12px;">'
-                        : '<p>No image</p>';
-                    
-                    html += '<div style="border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:8px;">' +
-                        '<strong>#' + p.id + ' - ' + p.name + '</strong>' +
-                        '<p>Category: ' + (p.category || 'Uncategorized') + '</p>' +
-                        '<p>Price: ₦' + (p.price || 'N/A') + '</p>' +
-                        imageHtml +
-                        '<br>' +
-                        '<button onclick="buyNow(\'' + p.name + '\', ' + p.price + ')" style="background:#25D366;color:white;border:none;padding:8px 12px;border-radius:4px;margin-top:5px;">Buy Now via WhatsApp</button>';
-                    
-                    if (isLoggedIn) {
-                        html += ' <button onclick="deleteProduct(' + p.id + ')" style="background:red;color:white;border:none;padding:8px 12px;border-radius:4px;margin-top:5px;">Delete</button>';
-                    }
-                    
-                    html += '</div>';
-                }
-
-                document.getElementById('product-list').innerHTML = html;
-            } catch(e) {
-                document.getElementById('product-list').textContent = 'Error: ' + e.message;
+            if (result.error) {
+                document.getElementById('product-list').textContent = 'Error: ' + result.error.message;
+                return;
             }
+
+            var products = result.data;
+            
+            if (!products || products.length === 0) {
+                document.getElementById('product-list').textContent = 'No products yet.';
+                return;
+            }
+
+            var html = '';
+            for (var i = 0; i < products.length; i++) {
+                var p = products[i];
+                var imageHtml = p.image_url 
+                    ? '<img src="' + p.image_url + '" alt="' + p.name + '" style="max-width:200px;border-radius:12px;display:block;margin-bottom:8px;">'
+                    : '<p>No image</p>';
+                
+                html += '<div class="product-card">' +
+                    '<strong>#' + p.id + ' - ' + p.name + '</strong>' +
+                    '<p>Price: ₦' + (p.price || 'N/A') + '</p>' +
+                    imageHtml +
+                    '<button class="btn-wa" onclick="buyNow(' + p.id + ')">Buy via WhatsApp</button>';
+                
+                // Status share button - only visible to admin
+                if (isLoggedIn) {
+                    html += ' <button class="btn-status" onclick="prepareStatus(' + p.id + ')">📤 Share to Status</button>';
+                }
+                
+                html += '</div>';
+            }
+
+            document.getElementById('product-list').innerHTML = html;
         }
 
         loadProducts();
 
         // === BUY NOW ===
-        function buyNow(productName, productPrice) {
-            var message = 'Hi Abihani Express! I want to buy: ' + productName + ' (₦' + (productPrice || 'N/A') + ')';
-            window.open('https://wa.me/' + whatsappNumber.replace('+', '') + '?text=' + encodeURIComponent(message), '_blank');
+        function buyNow(productId) {
+            var product = findProduct(productId);
+            if (!product) return;
+            var message = 'Hi Abihani Express! I want to buy: ' + product.name + ' (₦' + (product.price || 'N/A') + ')';
+            window.open('https://wa.me/2347067551684?text=' + encodeURIComponent(message), '_blank');
+        }
+
+        // === PREPARE STATUS ===
+        function prepareStatus(productId) {
+            var product = findProduct(productId);
+            if (!product) return;
+
+            statusProduct = product;
+
+            // Build status text
+            var statusText = '👜 *' + product.name + '*\n';
+            statusText += '💰 Price: ₦' + (product.price ? product.price.toLocaleString() : 'N/A') + '\n';
+            statusText += '🛒 Order now on Abihani Express!\n';
+            statusText += currentDomain;
+
+            document.getElementById('status-text').innerHTML = statusText.replace(/\n/g, '<br>');
+            document.getElementById('status-link').textContent = 'Product #' + product.id + ' | Abihani Express';
+            document.getElementById('status-preview').style.display = 'block';
+            document.getElementById('status-send-btn').style.display = 'inline-block';
+            document.getElementById('status-cancel-btn').style.display = 'inline-block';
+
+            // Scroll to preview
+            document.getElementById('status-preview').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        // === SEND TO STATUS ===
+        function sendToStatus() {
+            if (!statusProduct) return;
+
+            var message = '👜 *' + statusProduct.name + '*\n';
+            message += '💰 Price: ₦' + (statusProduct.price ? statusProduct.price.toLocaleString() : 'N/A') + '\n';
+            message += '🛒 Order now on Abihani Express!\n';
+            message += currentDomain;
+
+            // WhatsApp Status uses the normal wa.me link with text
+            // The user will need to manually forward to "My Status" in WhatsApp
+            var url = 'https://wa.me/?text=' + encodeURIComponent(message);
+            window.open(url, '_blank');
+
+            cancelStatus();
+        }
+
+        // === CANCEL STATUS ===
+        function cancelStatus() {
+            statusProduct = null;
+            document.getElementById('status-preview').style.display = 'none';
+            document.getElementById('status-send-btn').style.display = 'none';
+            document.getElementById('status-cancel-btn').style.display = 'none';
+            document.getElementById('status-text').textContent = '';
+        }
+
+        // === FIND PRODUCT ===
+        async function findProduct(productId) {
+            var result = await supabase.from('products').select('*').eq('id', productId).single();
+            return result.data;
         }
 
         // === CHECK SESSION ===
@@ -248,14 +249,14 @@
             var authResult = await supabase.auth.signInWithPassword({ email: email, password: password });
 
             if (authResult.error) {
-                document.getElementById('login-error').textContent = 'Login failed: ' + authResult.error.message;
+                document.getElementById('login-error').textContent = 'Login failed';
                 return;
             }
 
             var adminCheck = await supabase.from('admins').select('*').eq('email', email).single();
 
             if (adminCheck.error || !adminCheck.data) {
-                document.getElementById('login-error').textContent = 'Not an admin account';
+                document.getElementById('login-error').textContent = 'Not an admin';
                 await supabase.auth.signOut();
                 return;
             }
@@ -271,7 +272,7 @@
             document.getElementById('show-login-btn').style.display = 'none';
             document.getElementById('admin-panel').style.display = 'block';
             document.getElementById('login-status').textContent = 'Logged in';
-            document.getElementById('admin-welcome').textContent = 'Welcome, ' + (currentUser ? currentUser.email : 'Admin');
+            document.getElementById('admin-welcome').textContent = 'Welcome, ' + currentUser.email;
         }
 
         async function doLogout() {
@@ -282,69 +283,7 @@
             document.getElementById('show-login-btn').style.display = 'block';
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('login-status').textContent = 'Not logged in';
-            document.getElementById('login-password').value = '';
-            loadProducts();
-        }
-
-        // === UPLOAD PRODUCT ===
-        async function uploadNewProduct() {
-            var name = document.getElementById('product-name').value.trim();
-            var price = document.getElementById('product-price').value;
-            var category = document.getElementById('product-category').value;
-            var fileInput = document.getElementById('image-picker');
-            var file = fileInput.files[0];
-            
-            if (!name) {
-                document.getElementById('upload-status').textContent = 'Please enter a product name';
-                return;
-            }
-            if (!file) {
-                document.getElementById('upload-status').textContent = 'Please select an image';
-                return;
-            }
-
-            document.getElementById('upload-status').textContent = 'Uploading...';
-
-            try {
-                var fileExt = file.name.split('.').pop();
-                var fileName = 'products/' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + fileExt;
-                var uploadResult = await supabase.storage.from('images').upload(fileName, file);
-                
-                if (uploadResult.error) {
-                    document.getElementById('upload-status').textContent = 'Upload error: ' + uploadResult.error.message;
-                    return;
-                }
-
-                var urlResult = supabase.storage.from('images').getPublicUrl(fileName);
-                var publicUrl = urlResult.data.publicUrl;
-
-                var insertResult = await supabase.from('products').insert([{
-                    name: name,
-                    price: price ? parseInt(price) : 0,
-                    category: category || 'Uncategorized',
-                    image_url: publicUrl
-                }]);
-
-                if (insertResult.error) {
-                    document.getElementById('upload-status').textContent = 'Insert error: ' + insertResult.error.message;
-                    return;
-                }
-
-                document.getElementById('upload-status').textContent = 'Product added!';
-                document.getElementById('product-name').value = '';
-                document.getElementById('product-price').value = '';
-                document.getElementById('image-picker').value = '';
-                loadProducts();
-
-            } catch(e) {
-                document.getElementById('upload-status').textContent = 'Crash: ' + e.message;
-            }
-        }
-
-        // === DELETE PRODUCT ===
-        async function deleteProduct(productId) {
-            if (!confirm('Delete product #' + productId + '?')) return;
-            await supabase.from('products').delete().eq('id', productId);
+            cancelStatus();
             loadProducts();
         }
     </script>
