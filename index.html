@@ -9,7 +9,8 @@
     <div id="debug">Step 0: Page loaded</div>
     
     <!-- Product Display -->
-    <div id="product">LOADING PRODUCT...</div>
+    <h3>All Products</h3>
+    <div id="product-list">LOADING PRODUCTS...</div>
     
     <hr>
     
@@ -29,9 +30,11 @@
             <p id="admin-welcome"></p>
             <button onclick="doLogout()">Logout</button>
             <hr>
-            <h4>Upload New Product Image</h4>
-            <input type="file" id="image-picker" accept="image/*">
-            <button onclick="uploadNewImage()">Upload & Update</button>
+            <h4>Add New Product</h4>
+            <input type="text" id="product-name" placeholder="Product name"><br>
+            <input type="number" id="product-price" placeholder="Price (₦)"><br>
+            <input type="file" id="image-picker" accept="image/*"><br>
+            <button onclick="uploadNewProduct()">Add Product</button>
             <p id="upload-status"></p>
         </div>
     </div>
@@ -48,35 +51,49 @@
 
         document.getElementById('debug').textContent = 'Step 1: Supabase ready';
 
-        // === LOAD PRODUCT ===
-        async function loadProduct() {
+        // === LOAD ALL PRODUCTS ===
+        async function loadProducts() {
             try {
                 var result = await supabase
                     .from('products')
                     .select('*')
-                    .eq('id', 1)
-                    .single();
+                    .order('id', { ascending: false });
 
                 if (result.error) {
-                    document.getElementById('product').textContent = 'Error: ' + result.error.message;
+                    document.getElementById('product-list').textContent = 'Error: ' + result.error.message;
                     return;
                 }
 
-                var data = result.data;
-                var imageHtml = data.image_url 
-                    ? '<img src="' + data.image_url + '" alt="' + data.name + '" style="max-width:300px;border-radius:12px;">'
-                    : '<p>No image yet</p>';
+                var products = result.data;
+                
+                if (!products || products.length === 0) {
+                    document.getElementById('product-list').textContent = 'No products yet.';
+                    return;
+                }
 
-                document.getElementById('product').innerHTML = 
-                    '<h2>' + data.name + '</h2>' + imageHtml;
+                var html = '';
+                for (var i = 0; i < products.length; i++) {
+                    var p = products[i];
+                    var imageHtml = p.image_url 
+                        ? '<img src="' + p.image_url + '" alt="' + p.name + '" style="max-width:200px;border-radius:12px;">'
+                        : '<p>No image</p>';
+                    
+                    html += '<div style="border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:8px;">' +
+                        '<strong>#' + p.id + ' - ' + p.name + '</strong>' +
+                        '<p>Price: ₦' + (p.price || 'N/A') + '</p>' +
+                        imageHtml +
+                        '</div>';
+                }
+
+                document.getElementById('product-list').innerHTML = html;
             } catch(e) {
-                document.getElementById('product').textContent = 'Product Error: ' + e.message;
+                document.getElementById('product-list').textContent = 'Error: ' + e.message;
             }
         }
 
-        loadProduct();
+        loadProducts();
 
-        // === CHECK SESSION ON LOAD ===
+        // === CHECK SESSION ===
         async function checkSession() {
             var sessionResult = await supabase.auth.getSession();
             if (sessionResult.data && sessionResult.data.session) {
@@ -97,8 +114,6 @@
             var email = document.getElementById('login-email').value;
             var password = document.getElementById('login-password').value;
             
-            document.getElementById('debug').textContent = 'Step: Logging in...';
-
             var authResult = await supabase.auth.signInWithPassword({
                 email: email,
                 password: password
@@ -109,7 +124,6 @@
                 return;
             }
 
-            // Check if user is in admins table
             var adminCheck = await supabase
                 .from('admins')
                 .select('*')
@@ -146,54 +160,62 @@
             document.getElementById('login-password').value = '';
         }
 
-        // === UPLOAD IMAGE ===
-        async function uploadNewImage() {
+        // === UPLOAD NEW PRODUCT (does NOT replace existing) ===
+        async function uploadNewProduct() {
+            var name = document.getElementById('product-name').value.trim();
+            var price = document.getElementById('product-price').value;
             var fileInput = document.getElementById('image-picker');
             var file = fileInput.files[0];
             
+            if (!name) {
+                document.getElementById('upload-status').textContent = 'Please enter a product name';
+                return;
+            }
             if (!file) {
-                document.getElementById('upload-status').textContent = 'Please select a file first';
+                document.getElementById('upload-status').textContent = 'Please select an image';
                 return;
             }
 
             document.getElementById('upload-status').textContent = 'Uploading...';
 
             try {
-                // Generate unique filename
+                // Upload image
                 var fileExt = file.name.split('.').pop();
                 var fileName = 'products/' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + fileExt;
-
-                // Upload to Storage
                 var uploadResult = await supabase.storage.from('images').upload(fileName, file);
+                
                 if (uploadResult.error) {
                     document.getElementById('upload-status').textContent = 'Upload error: ' + uploadResult.error.message;
                     return;
                 }
 
-                // Get public URL
+                // Get URL
                 var urlResult = supabase.storage.from('images').getPublicUrl(fileName);
                 var publicUrl = urlResult.data.publicUrl;
 
-                document.getElementById('upload-status').textContent = 'Uploaded! URL: ' + publicUrl;
-
-                // Update database row
-                var updateResult = await supabase
+                // INSERT new row (NOT update)
+                var insertResult = await supabase
                     .from('products')
-                    .update({ image_url: publicUrl })
-                    .eq('id', 1);
+                    .insert([{
+                        name: name,
+                        price: price ? parseInt(price) : 0,
+                        image_url: publicUrl
+                    }]);
 
-                if (updateResult.error) {
-                    document.getElementById('upload-status').textContent = 'DB update error: ' + updateResult.error.message;
+                if (insertResult.error) {
+                    document.getElementById('upload-status').textContent = 'Insert error: ' + insertResult.error.message;
                     return;
                 }
 
-                document.getElementById('upload-status').textContent = 'Done! Refreshing...';
+                document.getElementById('upload-status').textContent = 'Product added!';
                 
-                // Reload product display
-                setTimeout(function() {
-                    loadProduct();
-                    document.getElementById('upload-status').textContent = '';
-                }, 500);
+                // Clear form
+                document.getElementById('product-name').value = '';
+                document.getElementById('product-price').value = '';
+                document.getElementById('image-picker').value = '';
+                
+                // Reload product list
+                loadProducts();
 
             } catch(e) {
                 document.getElementById('upload-status').textContent = 'Crash: ' + e.message;
