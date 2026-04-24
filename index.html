@@ -4,19 +4,18 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Abihani Express</title>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script>console.log("HELLO FROM PAGE");</script>
 </head>
 <body>
     <div id="product">LOADING...</div>
 
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
     <script>
         document.getElementById('product').textContent = 'Step 1: Script running';
 
-        const supabaseUrl = 'https://eljgjxoptjxwdpuvzkpp.supabase.co';
-        const supabaseKey = 'sb_publishable_RYlO1vwmzFViNl_68dDQ3Q_IfsRPIxZ';
+        var supabaseUrl = 'https://eljgjxoptjxwdpuvzkpp.supabase.co';
+        var supabaseKey = 'sb_publishable_RYlO1vwmzFViNl_68dDQ3Q_IfsRPIxZ';
 
-        let supabase;
+        var supabase;
         try {
             supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
             document.getElementById('product').textContent = 'Step 2: Client created';
@@ -27,21 +26,21 @@
         async function loadProduct() {
             try {
                 document.getElementById('product').textContent = 'Step 3: Fetching...';
-                const { data, error } = await supabase
+                var result = await supabase
                     .from('products')
                     .select('*')
                     .eq('id', 1)
                     .single();
 
-                if (error) {
-                    document.getElementById('product').textContent = 'Step 3 Error: ' + error.message;
+                if (result.error) {
+                    document.getElementById('product').textContent = 'Step 3 Error: ' + result.error.message;
                     return;
                 }
 
-                document.getElementById('product').innerHTML = `
-                    <h2>${data.name}</h2>
-                    <img src="${data.image_url}" alt="${data.name}" style="max-width:400px;border-radius:12px;">
-                `;
+                var data = result.data;
+                document.getElementById('product').innerHTML = 
+                    '<h2>' + data.name + '</h2>' +
+                    '<img src="' + data.image_url + '" alt="' + data.name + '" style="max-width:400px;border-radius:12px;">';
             } catch(e) {
                 document.getElementById('product').textContent = 'Step 3 Crash: ' + e.message;
             }
