@@ -10,29 +10,40 @@
     <div id="product"></div>
 
     <script>
-        // === CONFIGURATION ===
+        document.getElementById('product').textContent = 'Step 1: Script running';
+
         const supabaseUrl = 'https://eljgjxoptjxwdpuvzkpp.supabase.co';
         const supabaseKey = 'sb_publishable_RYlO1vwmzFViNl_68dDQ3Q_IfsRPIxZ';
-        const supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-        // === FETCH AND DISPLAY ===
+        let supabase;
+        try {
+            supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+            document.getElementById('product').textContent = 'Step 2: Client created';
+        } catch(e) {
+            document.getElementById('product').textContent = 'Failed at Step 2: ' + e.message;
+        }
+
         async function loadProduct() {
-            const { data, error } = await supabase
-                .from('products')
-                .select('*')
-                .eq('id', 1)
-                .single();
+            try {
+                document.getElementById('product').textContent = 'Step 3: Fetching...';
+                const { data, error } = await supabase
+                    .from('products')
+                    .select('*')
+                    .eq('id', 1)
+                    .single();
 
-            if (error) {
-                document.getElementById('product').textContent = 'Error: ' + error.message;
-                return;
+                if (error) {
+                    document.getElementById('product').textContent = 'Step 3 Error: ' + error.message;
+                    return;
+                }
+
+                document.getElementById('product').innerHTML = `
+                    <h2>${data.name}</h2>
+                    <img src="${data.image_url}" alt="${data.name}" style="max-width:400px;border-radius:12px;">
+                `;
+            } catch(e) {
+                document.getElementById('product').textContent = 'Step 3 Crash: ' + e.message;
             }
-
-            // data.name and data.image_url come from the database — NOT hardcoded
-            document.getElementById('product').innerHTML = `
-                <h2>${data.name}</h2>
-                <img src="${data.image_url}" alt="${data.name}" style="max-width:400px;border-radius:12px;">
-            `;
         }
 
         loadProduct();
