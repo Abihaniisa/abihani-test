@@ -3,29 +3,54 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Abihani Express</title>
+    <title>Abihani Express - Admin Test</title>
 </head>
 <body>
-    <div id="product">LOADING...</div>
+    <div id="debug">Step 0: Page loaded</div>
+    
+    <!-- Product Display -->
+    <div id="product">LOADING PRODUCT...</div>
+    
+    <hr>
+    
+    <!-- Login / Admin Section -->
+    <div id="admin-section">
+        <p id="login-status">Not logged in</p>
+        <button id="show-login-btn" onclick="showLoginForm()">Admin Login</button>
+        
+        <div id="login-form" style="display:none; margin:10px 0;">
+            <input type="email" id="login-email" placeholder="Email" value="bayeroisa2003@gmail.com"><br>
+            <input type="password" id="login-password" placeholder="Password"><br>
+            <button onclick="doLogin()">Log In</button>
+            <p id="login-error" style="color:red;"></p>
+        </div>
+        
+        <div id="admin-panel" style="display:none; margin:10px 0;">
+            <p id="admin-welcome"></p>
+            <button onclick="doLogout()">Logout</button>
+            <hr>
+            <h4>Upload New Product Image</h4>
+            <input type="file" id="image-picker" accept="image/*">
+            <button onclick="uploadNewImage()">Upload & Update</button>
+            <p id="upload-status"></p>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
     <script>
-        document.getElementById('product').textContent = 'Step 1: Script running';
-
+        // === CONFIG ===
         var supabaseUrl = 'https://eljgjxoptjxwdpuvzkpp.supabase.co';
         var supabaseKey = 'sb_publishable_RYlO1vwmzFViNl_68dDQ3Q_IfsRPIxZ';
+        var supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
+        
+        var isLoggedIn = false;
+        var currentUser = null;
 
-        var supabase;
-        try {
-            supabase = window.supabase.createClient(supabaseUrl, supabaseKey);
-            document.getElementById('product').textContent = 'Step 2: Client created';
-        } catch(e) {
-            document.getElementById('product').textContent = 'Failed at Step 2: ' + e.message;
-        }
+        document.getElementById('debug').textContent = 'Step 1: Supabase ready';
 
+        // === LOAD PRODUCT ===
         async function loadProduct() {
             try {
-                document.getElementById('product').textContent = 'Step 3: Fetching...';
                 var result = await supabase
                     .from('products')
                     .select('*')
@@ -33,20 +58,147 @@
                     .single();
 
                 if (result.error) {
-                    document.getElementById('product').textContent = 'Step 3 Error: ' + result.error.message;
+                    document.getElementById('product').textContent = 'Error: ' + result.error.message;
                     return;
                 }
 
                 var data = result.data;
+                var imageHtml = data.image_url 
+                    ? '<img src="' + data.image_url + '" alt="' + data.name + '" style="max-width:300px;border-radius:12px;">'
+                    : '<p>No image yet</p>';
+
                 document.getElementById('product').innerHTML = 
-                    '<h2>' + data.name + '</h2>' +
-                    '<img src="' + data.image_url + '" alt="' + data.name + '" style="max-width:400px;border-radius:12px;">';
+                    '<h2>' + data.name + '</h2>' + imageHtml;
             } catch(e) {
-                document.getElementById('product').textContent = 'Step 3 Crash: ' + e.message;
+                document.getElementById('product').textContent = 'Product Error: ' + e.message;
             }
         }
 
         loadProduct();
+
+        // === CHECK SESSION ON LOAD ===
+        async function checkSession() {
+            var sessionResult = await supabase.auth.getSession();
+            if (sessionResult.data && sessionResult.data.session) {
+                isLoggedIn = true;
+                currentUser = sessionResult.data.session.user;
+                showAdminPanel();
+            }
+        }
+        checkSession();
+
+        // === LOGIN ===
+        function showLoginForm() {
+            document.getElementById('login-form').style.display = 'block';
+            document.getElementById('show-login-btn').style.display = 'none';
+        }
+
+        async function doLogin() {
+            var email = document.getElementById('login-email').value;
+            var password = document.getElementById('login-password').value;
+            
+            document.getElementById('debug').textContent = 'Step: Logging in...';
+
+            var authResult = await supabase.auth.signInWithPassword({
+                email: email,
+                password: password
+            });
+
+            if (authResult.error) {
+                document.getElementById('login-error').textContent = 'Login failed: ' + authResult.error.message;
+                return;
+            }
+
+            // Check if user is in admins table
+            var adminCheck = await supabase
+                .from('admins')
+                .select('*')
+                .eq('email', email)
+                .single();
+
+            if (adminCheck.error || !adminCheck.data) {
+                document.getElementById('login-error').textContent = 'Not an admin account';
+                await supabase.auth.signOut();
+                return;
+            }
+
+            isLoggedIn = true;
+            currentUser = authResult.data.user;
+            showAdminPanel();
+        }
+
+        function showAdminPanel() {
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('show-login-btn').style.display = 'none';
+            document.getElementById('admin-panel').style.display = 'block';
+            document.getElementById('login-status').textContent = 'Logged in';
+            document.getElementById('admin-welcome').textContent = 'Welcome, ' + (currentUser ? currentUser.email : 'Admin');
+        }
+
+        async function doLogout() {
+            await supabase.auth.signOut();
+            isLoggedIn = false;
+            currentUser = null;
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('show-login-btn').style.display = 'block';
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('login-status').textContent = 'Not logged in';
+            document.getElementById('login-password').value = '';
+        }
+
+        // === UPLOAD IMAGE ===
+        async function uploadNewImage() {
+            var fileInput = document.getElementById('image-picker');
+            var file = fileInput.files[0];
+            
+            if (!file) {
+                document.getElementById('upload-status').textContent = 'Please select a file first';
+                return;
+            }
+
+            document.getElementById('upload-status').textContent = 'Uploading...';
+
+            try {
+                // Generate unique filename
+                var fileExt = file.name.split('.').pop();
+                var fileName = 'products/' + Date.now() + '_' + Math.random().toString(36).substring(2, 8) + '.' + fileExt;
+
+                // Upload to Storage
+                var uploadResult = await supabase.storage.from('images').upload(fileName, file);
+                if (uploadResult.error) {
+                    document.getElementById('upload-status').textContent = 'Upload error: ' + uploadResult.error.message;
+                    return;
+                }
+
+                // Get public URL
+                var urlResult = supabase.storage.from('images').getPublicUrl(fileName);
+                var publicUrl = urlResult.data.publicUrl;
+
+                document.getElementById('upload-status').textContent = 'Uploaded! URL: ' + publicUrl;
+
+                // Update database row
+                var updateResult = await supabase
+                    .from('products')
+                    .update({ image_url: publicUrl })
+                    .eq('id', 1);
+
+                if (updateResult.error) {
+                    document.getElementById('upload-status').textContent = 'DB update error: ' + updateResult.error.message;
+                    return;
+                }
+
+                document.getElementById('upload-status').textContent = 'Done! Refreshing...';
+                
+                // Reload product display
+                setTimeout(function() {
+                    loadProduct();
+                    document.getElementById('upload-status').textContent = '';
+                }, 500);
+
+            } catch(e) {
+                document.getElementById('upload-status').textContent = 'Crash: ' + e.message;
+            }
+        }
     </script>
 </body>
 </html>
