@@ -34,7 +34,7 @@
             <input type="text" id="product-name" placeholder="Product name"><br>
             <input type="number" id="product-price" placeholder="Price (₦)"><br>
             <input type="file" id="image-picker" accept="image/*"><br>
-            <button onclick="uploadNewProduct()">Add Product</button>
+            <button onclick="uploadNewProduct()">+ Add Product</button>
             <p id="upload-status"></p>
         </div>
     </div>
@@ -81,8 +81,14 @@
                     html += '<div style="border:1px solid #ccc; padding:10px; margin:10px 0; border-radius:8px;">' +
                         '<strong>#' + p.id + ' - ' + p.name + '</strong>' +
                         '<p>Price: ₦' + (p.price || 'N/A') + '</p>' +
-                        imageHtml +
-                        '</div>';
+                        imageHtml;
+                    
+                    // Add delete button if logged in
+                    if (isLoggedIn) {
+                        html += '<br><button onclick="deleteProduct(' + p.id + ')" style="background:red;color:white;border:none;padding:5px 10px;border-radius:4px;margin-top:5px;">Delete</button>';
+                    }
+                    
+                    html += '</div>';
                 }
 
                 document.getElementById('product-list').innerHTML = html;
@@ -93,6 +99,24 @@
 
         loadProducts();
 
+        // === DELETE PRODUCT (works on ANY product, including #1) ===
+        async function deleteProduct(productId) {
+            if (!confirm('Delete product #' + productId + '?')) return;
+            
+            var result = await supabase
+                .from('products')
+                .delete()
+                .eq('id', productId);
+            
+            if (result.error) {
+                alert('Delete error: ' + result.error.message);
+                return;
+            }
+            
+            // Reload the list
+            loadProducts();
+        }
+
         // === CHECK SESSION ===
         async function checkSession() {
             var sessionResult = await supabase.auth.getSession();
@@ -100,6 +124,7 @@
                 isLoggedIn = true;
                 currentUser = sessionResult.data.session.user;
                 showAdminPanel();
+                loadProducts(); // Reload to show delete buttons
             }
         }
         checkSession();
@@ -139,6 +164,7 @@
             isLoggedIn = true;
             currentUser = authResult.data.user;
             showAdminPanel();
+            loadProducts(); // Reload to show delete buttons
         }
 
         function showAdminPanel() {
@@ -158,9 +184,10 @@
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('login-status').textContent = 'Not logged in';
             document.getElementById('login-password').value = '';
+            loadProducts(); // Reload to hide delete buttons
         }
 
-        // === UPLOAD NEW PRODUCT (does NOT replace existing) ===
+        // === UPLOAD NEW PRODUCT ===
         async function uploadNewProduct() {
             var name = document.getElementById('product-name').value.trim();
             var price = document.getElementById('product-price').value;
@@ -193,7 +220,7 @@
                 var urlResult = supabase.storage.from('images').getPublicUrl(fileName);
                 var publicUrl = urlResult.data.publicUrl;
 
-                // INSERT new row (NOT update)
+                // INSERT new row
                 var insertResult = await supabase
                     .from('products')
                     .insert([{
