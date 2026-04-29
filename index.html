@@ -15,7 +15,17 @@
 
     <hr>
 
-    <h2>2. Change Password (Double Confirmation)</h2>
+    <h2>2. Create Account</h2>
+    <p style="color:gray;">Use this if your account status is "pending_password"</p>
+    <input type="text" id="create-email" placeholder="Your approved email"><br><br>
+    <input type="password" id="create-password" placeholder="New Password"><br><br>
+    <input type="password" id="create-confirm" placeholder="Confirm New Password"><br><br>
+    <button onclick="createAccount()">Create Account</button>
+    <pre id="create-status"></pre>
+
+    <hr>
+
+    <h2>3. Change Password (Double Confirmation)</h2>
     <input type="password" id="new-password" placeholder="New Password"><br><br>
     <input type="password" id="confirm-password" placeholder="Confirm New Password"><br><br>
     <button onclick="changePassword()">Change Password</button>
@@ -32,84 +42,69 @@
 
     var currentUser = null;
     var isCEO = false;
-
     var CEO_EMAILS = ['bayeroisa2003@gmail.com', 'abihaniisa@gmail.com', 'mrsabihani@gmail.com'];
 
     async function login() {
         var email = document.getElementById('login-email').value.trim();
         var password = document.getElementById('login-password').value;
         var el = document.getElementById('login-status');
-
         if (!email || !password) { el.textContent = 'Enter email and password'; return; }
-
         el.textContent = 'Logging in...';
 
-        // Try CEO login (Supabase Auth)
         if (CEO_EMAILS.indexOf(email) !== -1) {
             var auth = await supabase.auth.signInWithPassword({ email: email, password: password });
-            if (auth.error) {
-                el.textContent = 'Wrong password: ' + auth.error.message;
-                return;
-            }
-            isCEO = true;
-            currentUser = email;
+            if (auth.error) { el.textContent = 'Wrong password: ' + auth.error.message; return; }
+            isCEO = true; currentUser = email;
             document.getElementById('logged-in-as').textContent = 'Logged in as CEO: ' + email;
-            el.textContent = 'CEO login successful!';
-            return;
+            el.textContent = 'CEO login successful!'; return;
         }
 
-        // Try regular admin login (admins table)
         var admin = await supabase.from('admins').select('*').eq('email', email).single();
-        if (!admin.data) {
-            el.textContent = 'Email not found in admins table.';
-            return;
-        }
-
+        if (!admin.data) { el.textContent = 'Email not found.'; return; }
         var a = admin.data;
-
-        if (a.status === 'pending_password') {
-            el.textContent = 'Admin approved but no password set. Click Create Account to set one.';
-            return;
-        }
-
-        if (a.password_hash !== password) {
-            el.textContent = 'Wrong password.';
-            return;
-        }
-
-        isCEO = false;
-        currentUser = email;
+        if (a.status === 'pending_password') { el.textContent = 'No password set. Use Create Account below.'; return; }
+        if (a.status === 'frozen') { el.textContent = 'Account frozen.'; return; }
+        if (a.password_hash !== password) { el.textContent = 'Wrong password.'; return; }
+        isCEO = false; currentUser = email;
         document.getElementById('logged-in-as').textContent = 'Logged in as Admin: ' + email + ' (' + (a.business_name || '') + ')';
         el.textContent = 'Admin login successful!';
+    }
+
+    async function createAccount() {
+        var email = document.getElementById('create-email').value.trim();
+        var password = document.getElementById('create-password').value;
+        var confirm = document.getElementById('create-confirm').value;
+        var el = document.getElementById('create-status');
+        if (!email || !password || !confirm) { el.textContent = 'Fill all fields.'; return; }
+        if (password !== confirm) { el.textContent = 'Passwords do NOT match!'; return; }
+        el.textContent = 'Creating...';
+
+        var admin = await supabase.from('admins').select('*').eq('email', email).single();
+        if (!admin.data) { el.textContent = 'Email not approved for Administratorship.'; return; }
+        if (admin.data.password_hash) { el.textContent = 'Account already exists. Login or reset password.'; return; }
+
+        var result = await supabase.from('admins').update({ password_hash: password, status: 'active' }).eq('email', email);
+        if (result.error) { el.textContent = 'Error: ' + result.error.message; return; }
+        el.textContent = 'Account created! You can now login.';
     }
 
     async function changePassword() {
         var newPass = document.getElementById('new-password').value;
         var confirmPass = document.getElementById('confirm-password').value;
         var el = document.getElementById('change-status');
-
         if (!currentUser) { el.textContent = 'Login first.'; return; }
         if (!newPass || !confirmPass) { el.textContent = 'Fill both password fields.'; return; }
         if (newPass !== confirmPass) { el.textContent = 'Passwords do NOT match!'; return; }
-
         el.textContent = 'Updating...';
 
         if (isCEO) {
-            // CEO uses Supabase Auth
             var result = await supabase.auth.updateUser({ password: newPass });
-            if (result.error) {
-                el.textContent = 'Error: ' + result.error.message;
-            } else {
-                el.textContent = 'CEO password changed successfully! (Supabase Auth updated, admins table not touched)';
-            }
+            if (result.error) { el.textContent = 'Error: ' + result.error.message; }
+            else { el.textContent = 'CEO password changed! (Supabase Auth)'; }
         } else {
-            // Regular admin uses admins table
             var result = await supabase.from('admins').update({ password_hash: newPass }).eq('email', currentUser);
-            if (result.error) {
-                el.textContent = 'Error: ' + result.error.message;
-            } else {
-                el.textContent = 'Admin password changed successfully! (admins table updated)';
-            }
+            if (result.error) { el.textContent = 'Error: ' + result.error.message; }
+            else { el.textContent = 'Admin password changed! (admins table)'; }
         }
     }
     </script>
