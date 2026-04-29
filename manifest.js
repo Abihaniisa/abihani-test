@@ -9,12 +9,9 @@
         {
             "src": "https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png",
             "sizes": "192x192",
-            "type": "image/png"
-        },
-        {
-            "src": "https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png",
-            "sizes": "512x512",
-            "type": "image/png"
+            "type": "image/png",
+            "purpose": "any maskable"
         }
-    ]
+    ],
+    "prefer_related_applications": false
 }
