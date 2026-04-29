@@ -3,25 +3,81 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PWA Test</title>
+    <title>PWA Install Banner Test</title>
     <link rel="manifest" href="/manifest.json">
     <meta name="theme-color" content="#000000">
+    <style>
+        body { font-family: sans-serif; text-align: center; padding: 20px; }
+        #install-banner {
+            display: none;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: #b87c4f;
+            color: #fff;
+            padding: 16px;
+            text-align: center;
+            z-index: 9999;
+            font-size: 14px;
+        }
+        #install-banner button {
+            padding: 8px 20px;
+            border-radius: 20px;
+            font-weight: 600;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        .btn-install { background: #fff; color: #b87c4f; border: none; }
+        .btn-close { background: transparent; color: #fff; border: 1px solid #fff; margin-left: 8px; }
+    </style>
 </head>
 <body>
-    <h2>PWA Test</h2>
-    <p id="status">Checking...</p>
+
+    <h2>PWA Install Banner Test</h2>
+    <p id="status">Check browser console...</p>
+
+    <div id="install-banner">
+        <strong>Abihani Express</strong><br>
+        Add the app to your home screen for quick access.
+        <br>
+        <button class="btn-install" onclick="installApp()">Install</button>
+        <button class="btn-close" onclick="closeBanner()">Close</button>
+    </div>
+
     <script>
+    var deferredPrompt;
+
+    window.addEventListener('beforeinstallprompt', function(e) {
+        e.preventDefault();
+        deferredPrompt = e;
+        document.getElementById('install-banner').style.display = 'block';
+        document.getElementById('status').textContent = '✅ Install prompt detected! Banner shown.';
+    });
+
+    function installApp() {
+        if (deferredPrompt) {
+            deferredPrompt.prompt();
+            deferredPrompt.userChoice.then(function(result) {
+                document.getElementById('status').textContent = result.outcome === 'accepted' ? '🎉 App installed!' : '👎 Install dismissed.';
+                closeBanner();
+                deferredPrompt = null;
+            });
+        }
+    }
+
+    function closeBanner() {
+        document.getElementById('install-banner').style.display = 'none';
+    }
+
     if ('serviceWorker' in navigator) {
         window.addEventListener('load', function() {
             navigator.serviceWorker.register('/sw.js').then(function() {
-                document.getElementById('status').textContent = '✅ SW Registered. Install should be available in Chrome menu.';
-            }).catch(function(e) {
-                document.getElementById('status').textContent = '❌ SW Error: ' + e;
+                console.log('SW registered');
             });
         });
-    } else {
-        document.getElementById('status').textContent = '❌ No SW support.';
     }
     </script>
+
 </body>
 </html>
