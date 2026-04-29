@@ -4,14 +4,13 @@
     "start_url": "/",
     "display": "standalone",
     "background_color": "#ffffff",
-    "theme_color": "#b87c4f",
+    "theme_color": "#000000",
     "icons": [
         {
             "src": "https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png",
-            "sizes": "192x192",
+            "sizes": "512x512",
             "type": "image/png",
             "purpose": "any maskable"
         }
-    ],
-    "prefer_related_applications": false
+    ]
 }
