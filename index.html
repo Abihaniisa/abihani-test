@@ -3,56 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Email Test</title>
+    <title>Password Test</title>
 </head>
 <body>
 
-    <h2>Send Feedback</h2>
-    <input type="text" id="fb-name" placeholder="Name"><br><br>
-    <textarea id="fb-message" placeholder="Message"></textarea><br><br>
-    <button onclick="sendFeedback()">Submit Feedback</button>
-    <pre id="fb-status"></pre>
+    <h2>1. Login</h2>
+    <input type="text" id="login-email" placeholder="Email"><br><br>
+    <input type="password" id="login-password" placeholder="Password"><br><br>
+    <button onclick="login()">Login</button>
+    <pre id="login-status"></pre>
 
     <hr>
 
-    <h2>Send Email to Customer</h2>
-    <input type="text" id="cust-email" placeholder="Customer Email"><br><br>
-    <input type="text" id="cust-subject" placeholder="Subject"><br><br>
-    <textarea id="cust-message" placeholder="Message"></textarea><br><br>
-    <button onclick="sendToCustomer()">Send Email</button>
-    <pre id="cust-status"></pre>
+    <h2>2. Change Password (Double Confirmation)</h2>
+    <input type="password" id="new-password" placeholder="New Password"><br><br>
+    <input type="password" id="confirm-password" placeholder="Confirm New Password"><br><br>
+    <button onclick="changePassword()">Change Password</button>
+    <pre id="change-status"></pre>
 
+    <p id="logged-in-as" style="color:gray;"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
     <script>
-    var FROM = 'Abihani Express <support@abihaniexpress.com.ng>';
+    var supabase = window.supabase.createClient(
+        'https://cxjdisguniygctcznpjs.supabase.co',
+        'sb_publishable_ottyxWh7ow_VyNgHJz3rLw_eKPMUe9P'
+    );
 
-    async function sendEmail(from, to, subject, message, el) {
-        el.textContent = 'Sending...';
-        try {
-            var r = await fetch('/api/send-email', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ from: from, to: to, subject: subject, text: message })
-            });
-            var t = await r.text();
-            el.textContent = 'Status: ' + r.status + '\n' + t;
-        } catch(e) {
-            el.textContent = 'Error: ' + e.message;
+    var currentUser = null;
+    var isCEO = false;
+
+    var CEO_EMAILS = ['bayeroisa2003@gmail.com', 'abihaniisa@gmail.com', 'mrsabihani@gmail.com'];
+
+    async function login() {
+        var email = document.getElementById('login-email').value.trim();
+        var password = document.getElementById('login-password').value;
+        var el = document.getElementById('login-status');
+
+        if (!email || !password) { el.textContent = 'Enter email and password'; return; }
+
+        el.textContent = 'Logging in...';
+
+        // Try CEO login (Supabase Auth)
+        if (CEO_EMAILS.indexOf(email) !== -1) {
+            var auth = await supabase.auth.signInWithPassword({ email: email, password: password });
+            if (auth.error) {
+                el.textContent = 'Wrong password: ' + auth.error.message;
+                return;
+            }
+            isCEO = true;
+            currentUser = email;
+            document.getElementById('logged-in-as').textContent = 'Logged in as CEO: ' + email;
+            el.textContent = 'CEO login successful!';
+            return;
         }
+
+        // Try regular admin login (admins table)
+        var admin = await supabase.from('admins').select('*').eq('email', email).single();
+        if (!admin.data) {
+            el.textContent = 'Email not found in admins table.';
+            return;
+        }
+
+        var a = admin.data;
+
+        if (a.status === 'pending_password') {
+            el.textContent = 'Admin approved but no password set. Click Create Account to set one.';
+            return;
+        }
+
+        if (a.password_hash !== password) {
+            el.textContent = 'Wrong password.';
+            return;
+        }
+
+        isCEO = false;
+        currentUser = email;
+        document.getElementById('logged-in-as').textContent = 'Logged in as Admin: ' + email + ' (' + (a.business_name || '') + ')';
+        el.textContent = 'Admin login successful!';
     }
 
-    function sendFeedback() {
-        var n = document.getElementById('fb-name').value || 'Anonymous';
-        var m = document.getElementById('fb-message').value;
-        if (!m) { alert('Enter message'); return; }
-        sendEmail(FROM, 'bayeroisa2003@gmail.com', 'Feedback from ' + n, 'Name: ' + n + '\n\n' + m, document.getElementById('fb-status'));
-    }
+    async function changePassword() {
+        var newPass = document.getElementById('new-password').value;
+        var confirmPass = document.getElementById('confirm-password').value;
+        var el = document.getElementById('change-status');
 
-    function sendToCustomer() {
-        var e = document.getElementById('cust-email').value;
-        var s = document.getElementById('cust-subject').value;
-        var m = document.getElementById('cust-message').value;
-        if (!e || !s || !m) { alert('Fill all fields'); return; }
-        sendEmail(FROM, e, s, m, document.getElementById('cust-status'));
+        if (!currentUser) { el.textContent = 'Login first.'; return; }
+        if (!newPass || !confirmPass) { el.textContent = 'Fill both password fields.'; return; }
+        if (newPass !== confirmPass) { el.textContent = 'Passwords do NOT match!'; return; }
+
+        el.textContent = 'Updating...';
+
+        if (isCEO) {
+            // CEO uses Supabase Auth
+            var result = await supabase.auth.updateUser({ password: newPass });
+            if (result.error) {
+                el.textContent = 'Error: ' + result.error.message;
+            } else {
+                el.textContent = 'CEO password changed successfully! (Supabase Auth updated, admins table not touched)';
+            }
+        } else {
+            // Regular admin uses admins table
+            var result = await supabase.from('admins').update({ password_hash: newPass }).eq('email', currentUser);
+            if (result.error) {
+                el.textContent = 'Error: ' + result.error.message;
+            } else {
+                el.textContent = 'Admin password changed successfully! (admins table updated)';
+            }
+        }
     }
     </script>
 
