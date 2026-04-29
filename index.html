@@ -3,111 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Password Test</title>
+    <title>PWA Test</title>
+    <link rel="manifest" href="/manifest.json">
+    <meta name="theme-color" content="#b87c4f">
 </head>
 <body>
+    <h2>PWA Install Test</h2>
+    <p>If everything works, you'll see an install popup.</p>
+    <p id="status">Waiting...</p>
 
-    <h2>1. Login</h2>
-    <input type="text" id="login-email" placeholder="Email"><br><br>
-    <input type="password" id="login-password" placeholder="Password"><br><br>
-    <button onclick="login()">Login</button>
-    <pre id="login-status"></pre>
-
-    <hr>
-
-    <h2>2. Create Account</h2>
-    <p style="color:gray;">Use this if your account status is "pending_password"</p>
-    <input type="text" id="create-email" placeholder="Your approved email"><br><br>
-    <input type="password" id="create-password" placeholder="New Password"><br><br>
-    <input type="password" id="create-confirm" placeholder="Confirm New Password"><br><br>
-    <button onclick="createAccount()">Create Account</button>
-    <pre id="create-status"></pre>
-
-    <hr>
-
-    <h2>3. Change Password (Double Confirmation)</h2>
-    <input type="password" id="new-password" placeholder="New Password"><br><br>
-    <input type="password" id="confirm-password" placeholder="Confirm New Password"><br><br>
-    <button onclick="changePassword()">Change Password</button>
-    <pre id="change-status"></pre>
-
-    <p id="logged-in-as" style="color:gray;"></p>
-
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
     <script>
-    var supabase = window.supabase.createClient(
-        'https://cxjdisguniygctcznpjs.supabase.co',
-        'sb_publishable_ottyxWh7ow_VyNgHJz3rLw_eKPMUe9P'
-    );
-
-    var currentUser = null;
-    var isCEO = false;
-    var CEO_EMAILS = ['bayeroisa2003@gmail.com', 'abihaniisa@gmail.com', 'mrsabihani@gmail.com'];
-
-    async function login() {
-        var email = document.getElementById('login-email').value.trim();
-        var password = document.getElementById('login-password').value;
-        var el = document.getElementById('login-status');
-        if (!email || !password) { el.textContent = 'Enter email and password'; return; }
-        el.textContent = 'Logging in...';
-
-        if (CEO_EMAILS.indexOf(email) !== -1) {
-            var auth = await supabase.auth.signInWithPassword({ email: email, password: password });
-            if (auth.error) { el.textContent = 'Wrong password: ' + auth.error.message; return; }
-            isCEO = true; currentUser = email;
-            document.getElementById('logged-in-as').textContent = 'Logged in as CEO: ' + email;
-            el.textContent = 'CEO login successful!'; return;
-        }
-
-        var admin = await supabase.from('admins').select('*').eq('email', email).single();
-        if (!admin.data) { el.textContent = 'Email not found.'; return; }
-        var a = admin.data;
-        if (a.status === 'pending_password') { el.textContent = 'No password set. Use Create Account below.'; return; }
-        if (a.status === 'frozen') { el.textContent = 'Account frozen.'; return; }
-        if (a.password_hash !== password) { el.textContent = 'Wrong password.'; return; }
-        isCEO = false; currentUser = email;
-        document.getElementById('logged-in-as').textContent = 'Logged in as Admin: ' + email + ' (' + (a.business_name || '') + ')';
-        el.textContent = 'Admin login successful!';
-    }
-
-    async function createAccount() {
-        var email = document.getElementById('create-email').value.trim();
-        var password = document.getElementById('create-password').value;
-        var confirm = document.getElementById('create-confirm').value;
-        var el = document.getElementById('create-status');
-        if (!email || !password || !confirm) { el.textContent = 'Fill all fields.'; return; }
-        if (password !== confirm) { el.textContent = 'Passwords do NOT match!'; return; }
-        el.textContent = 'Creating...';
-
-        var admin = await supabase.from('admins').select('*').eq('email', email).single();
-        if (!admin.data) { el.textContent = 'Email not approved for Administratorship.'; return; }
-        if (admin.data.password_hash) { el.textContent = 'Account already exists. Login or reset password.'; return; }
-
-        var result = await supabase.from('admins').update({ password_hash: password, status: 'active' }).eq('email', email);
-        if (result.error) { el.textContent = 'Error: ' + result.error.message; return; }
-        el.textContent = 'Account created! You can now login.';
-    }
-
-    async function changePassword() {
-        var newPass = document.getElementById('new-password').value;
-        var confirmPass = document.getElementById('confirm-password').value;
-        var el = document.getElementById('change-status');
-        if (!currentUser) { el.textContent = 'Login first.'; return; }
-        if (!newPass || !confirmPass) { el.textContent = 'Fill both password fields.'; return; }
-        if (newPass !== confirmPass) { el.textContent = 'Passwords do NOT match!'; return; }
-        el.textContent = 'Updating...';
-
-        if (isCEO) {
-            var result = await supabase.auth.updateUser({ password: newPass });
-            if (result.error) { el.textContent = 'Error: ' + result.error.message; }
-            else { el.textContent = 'CEO password changed! (Supabase Auth)'; }
+    function registerSW() {
+        if ('serviceWorker' in navigator) {
+            navigator.serviceWorker.register('/sw.js')
+                .then(function(r) {
+                    document.getElementById('status').textContent = '✅ Service Worker registered! Install popup should appear soon.';
+                    console.log('SW registered');
+                })
+                .catch(function(e) {
+                    document.getElementById('status').textContent = '❌ SW failed: ' + e.message;
+                    console.log('SW failed', e);
+                });
         } else {
-            var result = await supabase.from('admins').update({ password_hash: newPass }).eq('email', currentUser);
-            if (result.error) { el.textContent = 'Error: ' + result.error.message; }
-            else { el.textContent = 'Admin password changed! (admins table)'; }
+            document.getElementById('status').textContent = '❌ Browser does not support Service Workers.';
         }
+    }
+
+    if (document.readyState === 'loading') {
+        window.addEventListener('load', registerSW);
+    } else {
+        registerSW();
     }
     </script>
-
 </body>
 </html>
