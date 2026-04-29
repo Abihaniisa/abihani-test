@@ -5,34 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PWA Test</title>
     <link rel="manifest" href="/manifest.json">
-    <meta name="theme-color" content="#b87c4f">
+    <meta name="theme-color" content="#000000">
 </head>
 <body>
-    <h2>PWA Install Test</h2>
-    <p>If everything works, you'll see an install popup.</p>
-    <p id="status">Waiting...</p>
-
+    <h2>PWA Test</h2>
+    <p id="status">Checking...</p>
     <script>
-    function registerSW() {
-        if ('serviceWorker' in navigator) {
-            navigator.serviceWorker.register('/sw.js')
-                .then(function(r) {
-                    document.getElementById('status').textContent = '✅ Service Worker registered! Install popup should appear soon.';
-                    console.log('SW registered');
-                })
-                .catch(function(e) {
-                    document.getElementById('status').textContent = '❌ SW failed: ' + e.message;
-                    console.log('SW failed', e);
-                });
-        } else {
-            document.getElementById('status').textContent = '❌ Browser does not support Service Workers.';
-        }
-    }
-
-    if (document.readyState === 'loading') {
-        window.addEventListener('load', registerSW);
+    if ('serviceWorker' in navigator) {
+        window.addEventListener('load', function() {
+            navigator.serviceWorker.register('/sw.js').then(function() {
+                document.getElementById('status').textContent = '✅ SW Registered. Install should be available in Chrome menu.';
+            }).catch(function(e) {
+                document.getElementById('status').textContent = '❌ SW Error: ' + e;
+            });
+        });
     } else {
-        registerSW();
+        document.getElementById('status').textContent = '❌ No SW support.';
     }
     </script>
 </body>
