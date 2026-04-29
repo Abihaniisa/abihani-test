@@ -23,36 +23,38 @@
     <pre id="cust-status"></pre>
 
     <script>
-async function sendEmail(from, to, subject, message, el) {
-    el.textContent = 'Sending...';
-    try {
-        var r = await fetch('/api/send-email', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ from: from, to: to, subject: subject, text: message })
-        });
-        var t = await r.text();
-        el.textContent = 'Status: ' + r.status + '\n' + t;
-    } catch(e) {
-        el.textContent = 'Error: ' + e.message;
+    var FROM = 'Abihani Express <support@abihaniexpress.com.ng>';
+
+    async function sendEmail(from, to, subject, message, el) {
+        el.textContent = 'Sending...';
+        try {
+            var r = await fetch('/api/send-email', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ from: from, to: to, subject: subject, text: message })
+            });
+            var t = await r.text();
+            el.textContent = 'Status: ' + r.status + '\n' + t;
+        } catch(e) {
+            el.textContent = 'Error: ' + e.message;
+        }
     }
-}
 
-function sendFeedback() {
-    var n = document.getElementById('fb-name').value || 'Anonymous';
-    var m = document.getElementById('fb-message').value;
-    if (!m) { alert('Enter message'); return; }
-    sendEmail('onboarding@resend.dev', 'bayeroisa2003@gmail.com', 'Feedback from ' + n, 'Name: ' + n + '\n\n' + m, document.getElementById('fb-status'));
-}
+    function sendFeedback() {
+        var n = document.getElementById('fb-name').value || 'Anonymous';
+        var m = document.getElementById('fb-message').value;
+        if (!m) { alert('Enter message'); return; }
+        sendEmail(FROM, 'bayeroisa2003@gmail.com', 'Feedback from ' + n, 'Name: ' + n + '\n\n' + m, document.getElementById('fb-status'));
+    }
 
-function sendToCustomer() {
-    var e = document.getElementById('cust-email').value;
-    var s = document.getElementById('cust-subject').value;
-    var m = document.getElementById('cust-message').value;
-    if (!e || !s || !m) { alert('Fill all fields'); return; }
-    sendEmail('onboarding@resend.dev', e, s, m, document.getElementById('cust-status'));
-}
-</script>
+    function sendToCustomer() {
+        var e = document.getElementById('cust-email').value;
+        var s = document.getElementById('cust-subject').value;
+        var m = document.getElementById('cust-message').value;
+        if (!e || !s || !m) { alert('Fill all fields'); return; }
+        sendEmail(FROM, e, s, m, document.getElementById('cust-status'));
+    }
+    </script>
 
 </body>
 </html>
