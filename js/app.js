@@ -1369,11 +1369,29 @@ async function sendCustomEmail() {
     if (!subject) { if (statusEl) { statusEl.style.color = '#e74c3c'; statusEl.textContent = CONFIG.UI_EMAIL_NO_SUBJECT; } return; }
     if (!message) { if (statusEl) { statusEl.style.color = '#e74c3c'; statusEl.textContent = CONFIG.UI_EMAIL_NO_MESSAGE; } return; }
     var footer = isCEO ? '<br><br><hr style="border-color:#e8dfd6;margin:16px 0 8px;"><p style="font-size:11px;color:#a6947e;">' + CONFIG.UI_EMAIL_CEO_FOOTER.replace(/\n/g, '<br>') + '</p>' : '';
-    var btn = document.getElementById('email-send-btn'); setBtnLoading(btn, 'Sending...');
-    var result = await sendEmail(recipient, subject, '<p>' + message.replace(/\n/g, '<br>') + '</p>' + footer);
-    resetBtn(btn, CONFIG.UI_EMAIL_SEND_BTN);
-    if (result) { if (statusEl) { statusEl.style.color = '#27ae60'; statusEl.textContent = CONFIG.UI_EMAIL_SENT; } document.getElementById('email-subject').value = ''; document.getElementById('email-message').value = ''; }
-    else { if (statusEl) { statusEl.style.color = '#e74c3c'; statusEl.textContent = 'Failed to send.'; } }
+    var btn = document.getElementById('email-send-btn');
+    setBtnLoading(btn, 'Sending...');
+    
+    // Direct fetch instead of sendEmail()
+    try {
+        var response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to: recipient, subject: subject, html: '<p>' + message.replace(/\n/g, '<br>') + '</p>' + footer })
+        });
+        resetBtn(btn, CONFIG.UI_EMAIL_SEND_BTN);
+        if (response.ok) {
+            if (statusEl) { statusEl.style.color = '#27ae60'; statusEl.textContent = CONFIG.UI_EMAIL_SENT; }
+            document.getElementById('email-subject').value = '';
+            document.getElementById('email-message').value = '';
+        } else {
+            var errData = await response.json().catch(function() { return {}; });
+            if (statusEl) { statusEl.style.color = '#e74c3c'; statusEl.textContent = 'Error: ' + (errData.error || 'Failed'); }
+        }
+    } catch (err) {
+        resetBtn(btn, CONFIG.UI_EMAIL_SEND_BTN);
+        if (statusEl) { statusEl.style.color = '#e74c3c'; statusEl.textContent = 'Error: ' + err.message; }
+    }
 }
 // ============ EMAIL SENDER ============
 async function sendEmail(to, subject, html) {
