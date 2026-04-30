@@ -3,6 +3,12 @@ export default async function handler(req, res) {
         return res.status(405).json({ error: 'Method not allowed' });
     }
     var body = req.body;
+    var to = body.to;
+    var subject = body.subject;
+    var html = body.html;
+    if (!to || !subject || !html) {
+        return res.status(400).json({ error: 'Missing required fields: to, subject, html' });
+    }
     try {
         var response = await fetch('https://api.resend.com/emails', {
             method: 'POST',
@@ -11,19 +17,20 @@ export default async function handler(req, res) {
                 'Authorization': 'Bearer re_gwvYG6oG_7GbFqxZTBcSQ8gdjYUCFHjQi'
             },
             body: JSON.stringify({
-                from: body.from || 'onboarding@resend.dev',
-                to: [body.to],
-                subject: body.subject,
-                text: body.text || body.message || ''
+                from: 'Abihani Express <support@abihaniexpress.com.ng>',
+                to: Array.isArray(to) ? to : [to],
+                subject: subject,
+                html: html,
+                reply_to: 'bayeroisa2003@gmail.com'
             })
         });
         var data = await response.json();
         if (response.ok) {
-            res.status(200).json(data);
+            res.status(200).json({ success: true, id: data.id });
         } else {
-            res.status(response.status).json(data);
+            res.status(response.status).json({ error: data.message });
         }
-    } catch(err) {
+    } catch (err) {
         res.status(500).json({ error: err.message });
     }
 }
