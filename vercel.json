@@ -5,6 +5,10 @@
             "destination": "/api/send-email"
         },
         {
+            "source": "/email-test.html",
+            "destination": "/email-test.html"
+        },
+        {
             "source": "/(.*)",
             "destination": "/index.html"
         }
