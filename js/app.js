@@ -1629,14 +1629,20 @@ function closeArtisanPopup() { document.getElementById('artisan-popup-container'
 // ============ FEEDBACK ============
 async function submitFeedback() {
     var n = document.getElementById('contact-name') ? document.getElementById('contact-name').value.trim() : 'Anonymous';
+    var e = document.getElementById('contact-email') ? document.getElementById('contact-email').value.trim() : '';
     var m = document.getElementById('contact-message') ? document.getElementById('contact-message').value.trim() : '';
     if (!m) { showHaniPopup('Empty Message 💬', 'My dad can\'t read blank pages.', null, 'error'); return; }
     var btn = document.getElementById('feedback-send-btn'); setBtnLoading(btn, 'Sending...');
     var r = await supabase.from('feedback').insert({ name: n || 'Anonymous', message: m });
     if (r.error) { showHaniPopup('Error 🔧', r.error.message, null, 'error'); resetBtn(btn, CONFIG.UI_CONTACT_SEND); return; }
-    sendEmail('bayeroisa2003@gmail.com', '📬 New Feedback from ' + (n || 'Anonymous'), '<p><strong>Name:</strong> ' + (n || 'Anonymous') + '</p><p><strong>Message:</strong></p><p>' + m.replace(/\n/g, '<br>') + '</p>');
+    var emailBody = '<p><strong>Name:</strong> ' + (n || 'Anonymous') + '</p>';
+    if (e) emailBody += '<p><strong>Email:</strong> ' + e + '</p>';
+    emailBody += '<p><strong>Message:</strong></p><p>' + m.replace(/\n/g, '<br>') + '</p>';
+    sendEmail('bayeroisa2003@gmail.com', '📬 New Feedback from ' + (n || 'Anonymous'), emailBody);
     resetBtn(btn, CONFIG.UI_CONTACT_SEND);
-    document.getElementById('contact-name').value = ''; document.getElementById('contact-message').value = '';
+    document.getElementById('contact-name').value = '';
+    if (document.getElementById('contact-email')) document.getElementById('contact-email').value = '';
+    document.getElementById('contact-message').value = '';
     showHaniPopup('Thank You! 📬', 'Your words are flying to my dad\'s inbox!', null, 'success'); setTimeout(closeHaniPopup, 5000);
 }
 
