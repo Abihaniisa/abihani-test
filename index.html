@@ -2,85 +2,61 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>PWA Test</title>
-    <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
-    <meta name="theme-color" content="#b87c4f">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-title" content="PWA Test">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png">
-    <link rel="apple-touch-icon" href="https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Nav Test</title>
     <style>
-        body { font-family: sans-serif; text-align: center; padding: 20px; }
-        #install-banner {
-            display: none;
+        body { font-family: sans-serif; margin: 0; padding-bottom: 80px; }
+        .page { display: none; padding: 20px; text-align: center; }
+        .page.active { display: block; }
+        .bottom-nav {
             position: fixed;
             bottom: 0;
             left: 0;
             width: 100%;
-            background: #b87c4f;
-            color: #fff;
-            padding: 16px;
-            text-align: center;
-            z-index: 9999;
-            font-size: 14px;
+            background: #fdf9f5;
+            border-top: 1px solid #e8dfd6;
+            padding: 8px 16px 12px;
+            display: flex;
+            justify-content: space-around;
+            z-index: 100;
         }
-        #install-banner button {
-            padding: 8px 20px;
-            border-radius: 20px;
-            font-weight: 600;
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            background: none;
+            border: none;
             cursor: pointer;
-            margin-top: 10px;
+            color: #a6947e;
+            font-size: 10px;
+            transition: color 0.2s;
         }
-        .btn-install { background: #fff; color: #b87c4f; border: none; }
-        .btn-close { background: transparent; color: #fff; border: 1px solid #fff; margin-left: 8px; }
+        .nav-item.active { color: #b87c4f; transform: scale(1.1); }
+        .nav-item i { font-size: 18px; }
     </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
 <body>
 
-    <h2>PWA Install Test</h2>
-    <p id="status">Checking...</p>
+    <div id="home" class="page active"><h2>Home</h2></div>
+    <div id="shop" class="page"><h2>Shop</h2></div>
+    <div id="search" class="page"><h2>Search</h2></div>
+    <div id="profile" class="page"><h2>Profile</h2></div>
 
-    <div id="install-banner">
-        <strong>PWA Test App</strong><br>
-        Add to your home screen for quick access.
-        <br>
-        <button class="btn-install" onclick="installApp()">Install</button>
-        <button class="btn-close" onclick="closeBanner()">Close</button>
+    <div class="bottom-nav">
+        <button class="nav-item active" onclick="showPage('home', this)"><i class="fas fa-home"></i><span>Home</span></button>
+        <button class="nav-item" onclick="showPage('shop', this)"><i class="fas fa-th-large"></i><span>Shop</span></button>
+        <button class="nav-item" onclick="showPage('search', this)"><i class="fas fa-search"></i><span>Search</span></button>
+        <button class="nav-item" onclick="showPage('profile', this)"><i class="fas fa-user"></i><span>Profile</span></button>
     </div>
 
     <script>
-    var deferredPrompt;
-
-    window.addEventListener('beforeinstallprompt', function(e) {
-        e.preventDefault();
-        deferredPrompt = e;
-        document.getElementById('install-banner').style.display = 'block';
-        document.getElementById('status').textContent = '✅ Install prompt detected!';
-    });
-
-    function installApp() {
-        if (deferredPrompt) {
-            deferredPrompt.prompt();
-            deferredPrompt.userChoice.then(function(result) {
-                document.getElementById('status').textContent = result.outcome === 'accepted' ? '🎉 App installed!' : '👎 Dismissed.';
-                closeBanner();
-                deferredPrompt = null;
-            });
-        }
-    }
-
-    function closeBanner() {
-        document.getElementById('install-banner').style.display = 'none';
-    }
-
-    if ('serviceWorker' in navigator) {
-        window.addEventListener('load', function() {
-            navigator.serviceWorker.register('/sw.js').then(function() {
-                console.log('SW registered');
-            });
-        });
+    function showPage(name, btn) {
+        document.querySelectorAll('.page').forEach(function(p) { p.classList.remove('active'); });
+        document.getElementById(name).classList.add('active');
+        document.querySelectorAll('.nav-item').forEach(function(n) { n.classList.remove('active'); });
+        btn.classList.add('active');
     }
     </script>
 
