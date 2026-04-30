@@ -2,215 +2,719 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>Abihani Express · Your perfect home for leather works</title>
-    <meta name="description" content="Abihani Express is the first and leading online store in Yobe State for premium leather goods — handcrafted, durable, and stylish.">
-    <meta name="keywords" content="leather, leather works, Yobe, Nigeria, handcrafted, shoes, bags, belts, Abihani Express, Abihani Isa, Potiskum">
-    <meta name="author" content="Abihani Express">
-    <meta name="robots" content="index, follow, max-image-preview:large">
-    <link rel="canonical" href="https://www.abihaniexpress.com.ng/">
-    <meta property="og:title" content="Abihani Express · Your perfect home for leather works">
-    <meta property="og:description" content="Premium handcrafted leather goods from Yobe State. Quality and durability is our promise.">
-    <meta property="og:image" content="https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/social-share.jpg">
-    <meta property="og:image:width" content="1200">
-    <meta property="og:image:height" content="630">
-    <meta property="og:url" content="https://www.abihaniexpress.com.ng/">
-    <meta property="og:type" content="website">
-    <meta property="og:site_name" content="Abihani Express">
-    <meta property="og:locale" content="en_NG">
-    <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Abihani Express · Your perfect home for leather works">
-    <meta name="twitter:description" content="Premium handcrafted leather goods from Yobe State.">
-    <meta name="twitter:image" content="https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/social-share.jpg">
-    <link rel="manifest" href="/manifest.webmanifest" crossorigin="use-credentials">
-    <meta name="theme-color" content="#b87c4f">
-    <meta name="mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta name="apple-mobile-web-app-title" content="Abihani Express">
-    <link rel="icon" type="image/png" sizes="192x192" href="https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png">
-    <link rel="apple-touch-icon" href="https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png">
-    <script type="application/ld+json">
-    {"@context":"https://schema.org","@type":"Organization","name":"Abihani Express","url":"https://www.abihaniexpress.com.ng","logo":"https://hibpuvurlvkuqjawkqlu.supabase.co/storage/v1/object/public/images/logo.png","description":"Premium handcrafted leather goods from Yobe State, Nigeria.","contactPoint":{"@type":"ContactPoint","telephone":"+2347067551684","contactType":"customer service","areaServed":"NG"},"sameAs":["https://www.facebook.com/Abihaniisa","https://www.instagram.com/abihani_isa","https://x.com/abihaniisa01"]}
-    </script>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,300;14..32,400;14..32,500;14..32,600;14..32,700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
-    <link rel="stylesheet" href="css/styles.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Abihani Express · Admin Test</title>
+    <style>
+        *{margin:0;padding:0;box-sizing:border-box}
+        body{font-family:'Inter',sans-serif;background:#fdf9f5;color:#2c2418;min-height:100vh}
+        .container{max-width:600px;margin:0 auto;padding:16px}
+        input,textarea,select{width:100%;padding:12px 16px;border:1px solid #e8dfd6;border-radius:12px;font-size:14px;margin:8px 0;background:#fdf9f5;color:#2c2418;font-family:inherit}
+        input:focus,textarea:focus,select:focus{outline:none;border-color:#b87c4f}
+        button{padding:12px 20px;border-radius:30px;font-weight:600;cursor:pointer;font-size:14px;border:none;display:inline-flex;align-items:center;gap:6px}
+        .btn-primary{background:#b87c4f;color:#fff}.btn-danger{background:#e74c3c;color:#fff}
+        .btn-outline{background:transparent;border:1.5px solid #b87c4f;color:#b87c4f}
+        .btn-sm{padding:6px 14px;font-size:12px}.btn-green{background:#27ae60;color:#fff}.btn-blue{background:#2980b9;color:#fff}
+        .card{background:#fff;border-radius:16px;padding:20px;margin-bottom:12px;border:1px solid #e8dfd6}
+        .card h3{color:#b87c4f;margin-bottom:8px;font-size:18px}.card h4{color:#b87c4f;margin-bottom:4px}
+        .flex{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+        .flex-between{display:flex;justify-content:space-between;align-items:center}
+        .item-row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid #f0ebe4;cursor:pointer;font-size:14px}
+        .item-row:hover{background:#fdf9f5}.item-row:last-child{border-bottom:none}
+        .badge{background:#e74c3c;color:#fff;border-radius:50%;padding:2px 8px;font-size:11px;min-width:20px;text-align:center}
+        .tabs{display:flex;gap:8px;margin-bottom:16px;border-bottom:2px solid #e8dfd6}
+        .tab{padding:8px 16px;border:none;background:transparent;color:#a6947e;font-weight:600;cursor:pointer;border-bottom:2px solid transparent;margin-bottom:-2px}
+        .tab.active{color:#b87c4f;border-bottom-color:#b87c4f}
+        .status{font-size:12px;margin-top:8px;min-height:18px}.status.success{color:#27ae60}.status.error{color:#e74c3c}.status.info{color:#2980b9}
+        .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,0.3);border-top-color:#fff;border-radius:50%;animation:spin 0.6s linear infinite}
+        @keyframes spin{to{transform:rotate(360deg)}}
+        .modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,0.6);z-index:1000;justify-content:center;align-items:center;padding:20px}
+        .modal-overlay.show{display:flex}
+        .modal{background:#fff;border-radius:16px;padding:20px;max-width:500px;width:100%;max-height:85vh;overflow-y:auto}
+        .modal h3{color:#b87c4f;margin-bottom:12px}
+        .close-btn{float:right;background:none;border:none;font-size:20px;cursor:pointer;color:#a6947e}
+        .image-preview{width:80px;height:80px;object-fit:cover;border-radius:8px;border:1px solid #e8dfd6;margin:4px}
+        .dropdown-list{max-height:180px;overflow-y:auto;border:1px solid #e8dfd6;border-radius:8px;margin-top:4px;display:none}
+        .dropdown-list.show{display:block}
+        .dropdown-item{padding:10px 14px;cursor:pointer;font-size:13px;border-bottom:1px solid #f0ebe4}
+        .dropdown-item:hover{background:#fdf9f5}
+        .toast{position:fixed;top:20px;left:50%;transform:translateX(-50%);padding:12px 24px;border-radius:12px;color:#fff;font-weight:600;z-index:2000;font-size:14px}
+        .toast.success{background:#27ae60}.toast.error{background:#e74c3c}.toast.info{background:#b87c4f}
+        label{font-size:12px;font-weight:600;color:#6b5a4a;display:block;margin-top:8px}
+    </style>
 </head>
 <body>
-<div id="announcement-bar" class="announcement-bar"><span id="announcement-text"></span><i class="fas fa-times" onclick="closeAnnouncement()"></i></div>
-<header class="app-header"><div class="container"><div class="header-content">
-    <div class="logo"><h1>Abihani Express</h1><span>MOM · DAD · UMMIHANI</span></div>
-    <nav class="desktop-nav">
-        <a href="/" data-page="home" onclick="navigateTo('home'); return false;">Home</a>
-        <a href="/shop" data-page="shop" onclick="navigateTo('shop'); return false;">Shop</a>
-        <a href="/about" data-page="about" onclick="navigateTo('about'); return false;">About</a>
-        <a href="/contact" data-page="contact" onclick="navigateTo('contact'); return false;">Contact</a>
-        <a href="/search" data-page="search" onclick="navigateTo('search'); return false;">Search</a>
-        <a href="/profile" data-page="profile" onclick="navigateTo('profile'); return false;">Profile</a>
-    </nav>
-    <div class="header-icons"><i class="fas fa-search" onclick="navigateTo('search')"></i><i class="fas fa-shopping-bag" onclick="navigateTo('shop')"></i><i class="fas fa-bars" id="menu-toggle"></i></div>
-</div></div></header>
-<div id="mobile-menu" class="mobile-menu">
-    <a href="/" onclick="navigateTo('home'); return false;"><i class="fas fa-home"></i> Home</a>
-    <a href="/shop" onclick="navigateTo('shop'); return false;"><i class="fas fa-store"></i> Shop</a>
-    <a href="/about" onclick="scrollToBooks(); return false;"><i class="fas fa-book"></i> Abihani's Works</a>
-    <a href="/search" onclick="navigateTo('search'); return false;"><i class="fas fa-search"></i> Search</a>
-    <a href="/about" onclick="navigateTo('about'); return false;"><i class="fas fa-info-circle"></i> About</a>
-    <a href="/contact" onclick="navigateTo('contact'); return false;"><i class="fas fa-envelope"></i> Contact</a>
-    <a href="/profile" onclick="navigateTo('profile'); return false;"><i class="fas fa-user"></i> Profile</a>
-    <hr><div class="mobile-theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun"></i><i class="fas fa-moon"></i><span class="toggle-knob"></span></div>
-</div>
-<main class="container">
-    <div id="home-page" class="page-section active-page">
-        <div id="hero-slider"><div class="slider-track" id="slider-track"></div><div class="slider-dots" id="slider-dots"></div></div>
-        <div class="nigeria-badge"><i class="fas fa-map-marker-alt"></i> <span id="nigeria-badge-display"></span> <i class="fas fa-flag"></i></div>
-        <div class="action-row"><button class="btn-primary" onclick="navigateTo('shop')"><i class="fas fa-store"></i> Explore Collection</button><button class="btn-secondary" onclick="openCustomOrderPopup()"><i class="fas fa-pen-alt"></i> Custom Order</button></div>
-        <div class="section-title"><h3>Shop by Categories</h3><a href="/shop" onclick="navigateTo('shop'); return false;">See all →</a></div>
-        <div class="category-scroll" id="categories-home"></div>
-        <div class="section-title"><h3>⭐ Featured Products</h3><a href="/shop" onclick="navigateTo('shop'); return false;">See all →</a></div>
-        <div class="product-scroll" id="featured-products"></div>
-        <div class="section-divider"></div>
-        <div class="trust-badges" id="trust-badges-container"></div>
-        <div class="section-divider"></div>
-        <div class="sustainability-section"><i class="fas fa-leaf"></i><h3 id="eco-heading-display"></h3><p id="eco-text-display"></p><div class="sustainability-badges" id="sustain-badges-container"></div></div>
-        <div class="section-divider"></div>
-        <div id="testimonials-section"><h3 style="text-align:center;"></h3><div class="testimonials-carousel" id="testimonials-carousel"></div></div>
-        <div class="section-divider"></div>
-        <div id="artisan-section-container"></div>
-        <div class="section-divider"></div>
-        <div class="section-logo-about"><img src="" class="circle-image-lg" alt="Logo" id="about-logo-img"><div class="text-content"><h3 id="about-logo-title"></h3><p id="about-logo-text"></p></div></div>
-        <div class="section-divider"></div>
-        <div class="section-ceo"><div class="text-content"><h3>Meet Abihani Isa</h3><p id="ceo-bio-display"></p><div class="ceo-contact-btns"><a href="#" class="btn-primary btn-sm" target="_blank" id="ceo-wa-btn"><i class="fab fa-whatsapp"></i> WhatsApp</a><a href="#" class="btn-outline btn-sm" id="ceo-email-btn"><i class="fas fa-envelope"></i> Email</a></div></div><img src="" class="ceo-image-lg" alt="CEO" id="ceo-image-display"></div>
-        <div class="info-card" style="text-align:center;"><h4>Our Mission</h4><p id="mission-display"></p></div>
-    </div>
-    <div id="shop-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div>
-        <div class="section-title"><h3>All Products</h3></div>
-        <div class="category-scroll" id="shop-categories-filter"><div class="category-pill active" onclick="filterAllProducts()">All</div></div>
-        <div class="product-grid" id="all-products-grid"></div>
-        <div class="section-divider"></div>
-        <div class="section-ceo"><div class="text-content"><h3>Meet Abihani Isa</h3><p id="shop-ceo-bio-display"></p></div><img src="" class="ceo-image-lg" alt="CEO" id="shop-ceo-img"></div>
-        <div class="info-card" style="text-align:center;"><h4>Our Mission</h4><p id="shop-mission-display"></p></div>
-    </div>
-    <div id="product-detail-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> <span id="detail-back-label">Back to Shop</span></div>
-        <div id="product-breadcrumb" class="product-breadcrumb"></div>
-        <div id="product-detail-container"></div>
-        <div id="product-share-container" style="text-align:right;margin:8px 0;"></div>
-        <div class="section-divider"></div>
-        <div id="related-products-section"><div class="section-title"><h3>You May Also Like</h3></div><div class="product-scroll" id="related-products-scroll"></div></div>
-    </div>
-    <div id="search-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div>
-        <div class="search-box"><input type="text" id="search-input" placeholder="" autocomplete="off"></div>
-        <div id="search-results" class="product-grid"></div>
-    </div>
-    <div id="about-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div>
-        <div class="info-card"><h4>Who We Are</h4><p id="about-who-display"></p></div>
-        <div class="info-card"><h4>Our Mission</h4><p id="about-mission-display"></p></div>
-        <div class="section-ceo"><div class="text-content"><h3>Meet Abihani Isa</h3><p id="about-ceo-display"></p></div><img src="" class="ceo-image-lg" alt="CEO" id="about-ceo-img"></div>
-        <div class="section-title"><h3></h3></div><div class="books-container" id="books-container"></div>
-    </div>
-    <div id="terms-page" class="page-section"><div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div><div class="admin-card" id="terms-content"></div></div>
-    <div id="privacy-page" class="page-section"><div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div><div class="admin-card" id="privacy-content"></div></div>
-    <div id="contact-page" class="page-section">
-    <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div>
-    <h3>📬 Contact & Feedback</h3>
-    <div class="admin-card"><input type="text" id="contact-name" placeholder="Your name (optional)" class="admin-input" autocomplete="name"><input type="email" id="contact-email" placeholder="Your email (optional, so we can reply)" class="admin-input" autocomplete="email"><textarea id="contact-message" placeholder="Your message..." class="admin-input" style="border-radius:24px;height:100px;"></textarea><button class="btn-primary" style="width:100%;" onclick="submitFeedback()" id="feedback-send-btn">Send feedback</button></div>
-    <div class="social-icons" id="social-links"></div>
-</div>
-    <div id="profile-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div>
-        <div class="feature-unavailable" id="profile-content">
-            <i class="fas fa-lock" style="font-size:48px;color:var(--accent);"></i><h4 id="profile-heading"></h4><p id="profile-subheading"></p>
-            <button class="btn-primary" onclick="navigateTo('admin-login')" id="profile-login-btn">🔐 Admin Login</button>
-            <div style="margin-top:16px;padding-top:14px;border-top:1px solid var(--border);"><p style="color:var(--text-secondary);margin-bottom:12px;" id="profile-no-account"></p><button class="btn-secondary" onclick="showAdminApplicationForm()" id="profile-apply-btn">📝 Apply for Administratorship</button><p style="font-size:11px;color:var(--text-muted);margin-top:8px;" id="profile-price-note"></p></div>
-        </div>
-        <div id="already-applied-card" style="display:none;"></div>
-    </div>
-    <div id="admin-login-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Admin Portal</div>
-        <div class="admin-login-box">
-            <h2 style="text-align:center;">🔐 Admin Portal</h2>
-            <input type="email" id="admin-email" placeholder="Email" class="admin-input" autocomplete="email" inputmode="email">
-            <div style="position:relative;"><input type="password" id="admin-password" placeholder="Password" class="admin-input" autocomplete="new-password" style="padding-right:45px;"><i class="fas fa-eye-slash" id="toggle-password" style="position:absolute;right:16px;top:50%;transform:translateY(-50%);cursor:pointer;color:var(--text-muted);font-size:18px;"></i></div>
-            <button class="btn-primary" style="width:100%;" id="login-btn">Log In</button>
-            <div id="login-toast" style="text-align:center;margin-top:8px;min-height:24px;"></div>
-            <div style="text-align:center;margin-top:14px;display:flex;justify-content:center;gap:6px;flex-wrap:wrap;align-items:center;">
-                <a href="#" class="login-action-link" onclick="showCreateAccountModal(); return false;">Create an account</a>
-                <a href="#" class="login-action-link" onclick="forgotPassword(); return false;">Forgot your password?</a>
-            </div>
-        </div>
-    </div>
-    <div id="admin-dashboard-page" class="page-section">
-        <div class="page-back-arrow" onclick="goBackSmart()"><i class="fas fa-arrow-left"></i> Home</div>
-        <div style="display:flex;justify-content:space-between;margin:20px 0;flex-wrap:wrap;gap:10px;"><h3>👑 Admin Dashboard</h3><button class="btn-secondary" onclick="logoutAdmin()">Logout</button></div>
-        <div id="admin-dashboard-content"></div>
-    </div>
-</main>
-<footer class="app-footer"><div class="container"><div class="footer-row"><div class="footer-brand"><h4>Abihani Express</h4><p>Your perfect home for leather works</p></div><div class="footer-links"><a href="/about" onclick="navigateTo('about'); return false;">About</a><a href="/terms" onclick="navigateTo('terms'); return false;">Terms</a><a href="/privacy" onclick="navigateTo('privacy'); return false;">Privacy</a></div><div class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-sun"></i><i class="fas fa-moon"></i><span class="toggle-knob"></span></div></div><div class="footer-bottom-row"><button class="contact-btn" onclick="navigateTo('contact')">Feedback & Contact</button><span class="copyright-text">Abihani Express © 2026. All rights reserved.</span></div></div></footer>
-<div id="book-popup" class="book-popup-overlay"><div class="book-popup-content"><span class="book-popup-close" onclick="closeBookPopup()">&times;</span><div class="book-popup-body"><div class="book-popup-image"><img id="book-popup-img" src="" alt="Book cover"></div><div class="book-popup-info"><h3 id="book-popup-title"></h3><p class="popup-author" id="book-popup-author"></p><div class="book-synopsis"><h4>📖 Synopsis</h4><p id="book-popup-synopsis"></p></div><div class="popup-price"><span id="book-popup-price"></span></div><a href="#" id="book-popup-action-btn" class="btn-popup-wa" target="_blank"><i class="fab fa-whatsapp"></i> Buy via WhatsApp</a></div></div></div></div>
-<div id="custom-order-popup" class="custom-order-overlay"><div class="custom-order-content"><span class="custom-order-close" onclick="closeCustomOrderPopup()">&times;</span><h3 id="custom-order-popup-title">Custom Order Request</h3><p id="custom-order-popup-subtitle"></p><form id="custom-order-form" onsubmit="submitCustomOrder(event)"></form></div></div>
-<div id="artisan-popup-container"></div>
-<div id="admin-form-modal" class="custom-order-overlay" style="display:none;"><div class="custom-order-content" id="admin-form-modal-content"><span class="custom-order-close" onclick="closeAdminModal()">&times;</span></div></div>
+<div class="container" id="app"></div>
+<div class="modal-overlay" id="modal-overlay"><div class="modal" id="modal-content"></div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.min.js"></script>
+<script>
+var SUPABASE_URL = 'https://hibpuvurlvkuqjawkqlu.supabase.co';
+var SUPABASE_KEY = 'sb_publishable_Mb6I2-X_6J2Hl-MbcAQRzA_mgWsduoA';
+var RESEND_KEY = 're_gwvYG6oG_7GbFqxZTBcSQ8gdjYUCFHjQi';
+var CEO_EMAIL = 'bayeroisa2003@gmail.com';
+var CEO_EMAILS = ['bayeroisa2003@gmail.com','abihaniisa@gmail.com','mrsabihani@gmail.com'];
+var supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+var currentUser = null;
+var viewingAdmin = null;
+var inactivityTimer = null;
+var allPartners = [];
+var allCategories = [];
+var allSubcategories = [];
+var allProducts = [];
 
-<!-- Hani Popup System -->
-<div id="hani-popup-overlay" class="hani-popup-overlay" style="display:none;">
-    <div class="hani-popup-card" id="hani-popup-card">
-        <button class="hani-popup-close" onclick="closeHaniPopup()">✕</button>
-        <img id="hani-popup-avatar" src="" alt="Hani" class="hani-popup-avatar">
-        <h3 id="hani-popup-title"></h3>
-        <p id="hani-popup-message"></p>
-        <div id="hani-popup-actions"></div>
-    </div>
-</div>
+function render(html) { document.getElementById('app').innerHTML = html; }
 
-<!-- Hani Tour Overlay -->
-<div id="hani-tour-overlay" class="hani-tour-overlay" style="display:none;">
-    <div class="hani-tour-card">
-        <img src="" alt="Hani" class="hani-tour-avatar" id="hani-tour-avatar">
-        <h3 id="hani-tour-title"></h3>
-        <p id="hani-tour-text"></p>
-        <div class="hani-tour-actions" id="hani-tour-actions"></div>
-        <div class="hani-tour-dots" id="hani-tour-dots"></div>
-    </div>
-</div>
+function showToast(msg, type) {
+    var t = document.createElement('div');
+    t.className = 'toast ' + (type || 'info');
+    t.textContent = msg;
+    document.body.appendChild(t);
+    setTimeout(function() { t.remove(); }, 4000);
+}
 
-<!-- Hani Living Character -->
-<div id="hani-character" class="hani-character" style="display:none;" onclick="toggleHaniChat()">
-    <img src="" alt="Hani" id="hani-char-img">
-    <div class="hani-char-status" id="hani-char-status"></div>
-</div>
+function openModal(html) {
+    document.getElementById('modal-content').innerHTML = '<span class="close-btn" onclick="closeModal()">&times;</span>' + html;
+    document.getElementById('modal-overlay').classList.add('show');
+}
+function closeModal() { document.getElementById('modal-overlay').classList.remove('show'); }
 
-<!-- PWA Install Banner -->
-<div id="pwa-install-banner" class="pwa-install-banner" style="display:none;">
-    <div class="pwa-install-content">
-        <img src="" alt="Hani" class="pwa-install-avatar" id="pwa-install-avatar">
-        <div>
-            <strong>Install Abihani Express</strong>
-            <p>Quick access to the finest leather goods. My dad would love that! 🤎</p>
-        </div>
-        <button class="btn-primary btn-sm" onclick="installPWA()">Install</button>
-<button class="btn-secondary btn-sm" onclick="closePWAInstall()">Later</button>
-    </div>
-</div>
+function resetInactivityTimer() {
+    clearTimeout(inactivityTimer);
+    if (!currentUser) return;
+    inactivityTimer = setTimeout(function() {
+        currentUser = null; viewingAdmin = null;
+        localStorage.removeItem('abihani_test_session');
+        renderLogin(); showToast('Logged out due to inactivity', 'info');
+    }, 300000);
+}
+document.addEventListener('click', resetInactivityTimer);
+document.addEventListener('keydown', resetInactivityTimer);
 
-<div class="bottom-nav">
-    <button class="nav-item active" id="nav-home" onclick="navigateTo('home')"><i class="fas fa-home"></i><span>Home</span></button>
-    <button class="nav-item" id="nav-shop" onclick="navigateTo('shop')"><i class="fas fa-th-large"></i><span>Shop</span></button>
-    <button class="nav-item" id="nav-search" onclick="navigateTo('search')"><i class="fas fa-search"></i><span>Search</span></button>
-    <button class="nav-item" id="nav-profile" onclick="navigateTo('profile')"><i class="fas fa-user"></i><span>Profile</span></button>
-</div>
-<button id="scroll-to-top" class="scroll-to-top" onclick="window.scrollTo({top:0,behavior:'smooth'})"><i class="fas fa-arrow-up"></i></button>
+function saveSession() {
+    localStorage.setItem('abihani_test_session', JSON.stringify({
+        email: currentUser ? currentUser.email : null,
+        role: currentUser ? currentUser.role : null,
+        isCEO: currentUser ? currentUser.isCEO : false
+    }));
+}
+function loadSession() {
+    var s = localStorage.getItem('abihani_test_session');
+    if (s) {
+        var data = JSON.parse(s);
+        if (data.email) { currentUser = { email: data.email, role: data.role, isCEO: data.isCEO }; resetInactivityTimer(); return true; }
+    }
+    return false;
+}
 
-<script src="js/env.js"></script>
-<script src="js/config.js"></script>
-<script src="js/app.js"></script>
+async function sendEmail(to, subject, html) {
+    try {
+        var r = await fetch('/api/send-email', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ to: to, subject: subject, html: html }) });
+        return r.ok;
+    } catch(e) { return false; }
+}
 
-<!-- Hani Botpress Chat -->
-<script src="https://cdn.botpress.cloud/webchat/v3.6/inject.js" defer data-config-url="https://files.bpcontent.cloud/2026/04/30/00/20260430004011-5QCU85DU.json"></script>
+async function loadAllData() {
+    var ownerEmail = viewingAdmin || (currentUser ? currentUser.email : '');
+    var c = await supabase.from('categories').select('*').order('sort_order');
+    allCategories = (c.data || []).filter(function(x) { return currentUser && currentUser.isCEO && !viewingAdmin ? true : x.owner_email === ownerEmail; });
+    var s = await supabase.from('subcategories').select('*');
+    allSubcategories = (s.data || []).filter(function(x) { return currentUser && currentUser.isCEO && !viewingAdmin ? true : x.owner_email === ownerEmail; });
+    var p = await supabase.from('products').select('*').order('created_at', { ascending: false });
+    allProducts = (p.data || []).filter(function(x) { return currentUser && currentUser.isCEO && !viewingAdmin ? true : x.owner_email === ownerEmail; });
+    var a = await supabase.from('admins').select('*').neq('role','Owner').order('created_at', { ascending: false });
+    allPartners = a.data || [];
+}
+
+function logout() {
+    currentUser = null; viewingAdmin = null;
+    localStorage.removeItem('abihani_test_session');
+    clearTimeout(inactivityTimer); renderLogin();
+}
+
+(function init() {
+    if (loadSession()) { renderDashboard(); loadAllData().then(function() { renderDashboard(); }); }
+    else { renderLogin(); }
+})();
+// ============ LOGIN ============
+function renderLogin() {
+    var html = '<div class="card" style="margin-top:40px"><h3 style="text-align:center">🔐 Abihani Express Admin</h3>';
+    html += '<input type="email" id="login-email" placeholder="Email" autocomplete="email"><br>';
+    html += '<input type="password" id="login-password" placeholder="Password" autocomplete="current-password"><br>';
+    html += '<button class="btn-primary" style="width:100%" onclick="doLogin()">Log In</button>';
+    html += '<div id="login-status" class="status"></div>';
+    html += '<div style="text-align:center;margin-top:12px;font-size:13px">';
+    html += '<a href="#" onclick="renderCreateAccount()" style="color:#b87c4f">Create an account</a> &nbsp;|&nbsp; ';
+    html += '<a href="#" onclick="renderApplyForm()" style="color:#b87c4f">Apply for Administratorship</a>';
+    html += '</div></div>';
+    render(html);
+}
+
+async function doLogin() {
+    var email = document.getElementById('login-email').value.trim();
+    var password = document.getElementById('login-password').value;
+    var statusEl = document.getElementById('login-status');
+    if (!email || !password) { statusEl.textContent = 'Enter email and password'; statusEl.className = 'status error'; return; }
+    statusEl.textContent = 'Logging in...'; statusEl.className = 'status info';
+    var isCEO = CEO_EMAILS.indexOf(email) !== -1;
+    if (isCEO) {
+        var auth = await supabase.auth.signInWithPassword({ email: email, password: password });
+        if (auth.error) { statusEl.textContent = 'Wrong password'; statusEl.className = 'status error'; return; }
+        currentUser = { email: email, role: 'Owner', isCEO: true };
+        saveSession(); resetInactivityTimer(); await loadAllData(); renderDashboard(); return;
+    }
+    var admins = await supabase.from('admins').select('*').eq('email', email);
+    if (!admins.data || admins.data.length === 0) { statusEl.textContent = 'No account found. Apply for administratorship.'; statusEl.className = 'status error'; return; }
+    var admin = admins.data[0];
+    if (admin.status === 'frozen') { statusEl.textContent = 'Your account has been paused. Contact Abihani Express to resolve it.'; statusEl.className = 'status error'; return; }
+    if (admin.status === 'pending_password') { statusEl.textContent = 'Approved! Create your account below.'; statusEl.className = 'status info'; return; }
+    if (admin.expiry_date && new Date(admin.expiry_date) < new Date()) { statusEl.textContent = 'Administratorship expired. Contact CEO to renew.'; statusEl.className = 'status error'; return; }
+    if (admin.password_hash !== password) { statusEl.textContent = 'Wrong password'; statusEl.className = 'status error'; return; }
+    currentUser = { email: email, role: 'admin', isCEO: false };
+    saveSession(); resetInactivityTimer(); await loadAllData(); renderDashboard();
+}
+
+// ============ CREATE ACCOUNT ============
+function renderCreateAccount() {
+    var html = '<div class="card" style="margin-top:40px"><h3 style="text-align:center">Join the Family</h3>';
+    html += '<p style="font-size:12px;color:#a6947e;text-align:center">Use your approved email to set a password.</p>';
+    html += '<input type="email" id="create-email" placeholder="Email (must be approved)" autocomplete="email"><br>';
+    html += '<input type="password" id="create-password" placeholder="Create Password" autocomplete="new-password"><br>';
+    html += '<input type="password" id="create-confirm" placeholder="Confirm Password" autocomplete="new-password"><br>';
+    html += '<button class="btn-primary" style="width:100%" onclick="doCreateAccount()">Create Account</button>';
+    html += '<div id="create-status" class="status"></div>';
+    html += '<button class="btn-outline btn-sm" style="width:100%;margin-top:8px" onclick="renderLogin()">← Back to Login</button></div>';
+    render(html);
+}
+
+async function doCreateAccount() {
+    var email = document.getElementById('create-email').value.trim();
+    var password = document.getElementById('create-password').value;
+    var confirm = document.getElementById('create-confirm').value;
+    var statusEl = document.getElementById('create-status');
+    if (!email || !password || !confirm) { statusEl.textContent = 'All fields required'; statusEl.className = 'status error'; return; }
+    if (password !== confirm) { statusEl.textContent = 'Passwords do not match'; statusEl.className = 'status error'; return; }
+    var admin = await supabase.from('admins').select('*').eq('email', email).single();
+    if (!admin.data) { statusEl.textContent = 'This email is not approved yet'; statusEl.className = 'status error'; return; }
+    if (admin.data.password_hash) { statusEl.textContent = 'Account already exists. Please log in.'; statusEl.className = 'status error'; return; }
+    await supabase.from('admins').update({ password_hash: password, status: 'active' }).eq('email', email);
+    statusEl.textContent = 'Account created! You can now log in.'; statusEl.className = 'status success';
+    setTimeout(function() { renderLogin(); }, 1500);
+}
+
+// ============ APPLY FOR ADMINISTRATORSHIP ============
+function renderApplyForm() {
+    var html = '<div class="card" style="margin-top:40px"><h3 style="text-align:center">📝 Apply for Administratorship</h3>';
+    html += '<p style="font-size:12px;color:#a6947e;text-align:center">Fill this form to request your own store on Abihani Express.</p>';
+    html += '<input id="app-name" placeholder="Full Name *">';
+    html += '<input id="app-business" placeholder="Business Name *">';
+    html += '<input id="app-email" type="email" placeholder="Email (will be your login) *">';
+    html += '<input id="app-whatsapp" placeholder="WhatsApp Number *">';
+    html += '<button class="btn-primary" style="width:100%" onclick="submitApplication()">📤 Send Request</button>';
+    html += '<div id="apply-status" class="status"></div>';
+    html += '<button class="btn-outline btn-sm" style="width:100%;margin-top:8px" onclick="renderLogin()">← Back to Login</button></div>';
+    render(html);
+}
+
+async function submitApplication() {
+    var name = document.getElementById('app-name').value.trim();
+    var business = document.getElementById('app-business').value.trim();
+    var email = document.getElementById('app-email').value.trim();
+    var whatsapp = document.getElementById('app-whatsapp').value.trim();
+    var statusEl = document.getElementById('apply-status');
+    if (!name || !business || !email || !whatsapp) { statusEl.textContent = 'All fields are required'; statusEl.className = 'status error'; return; }
+    var existing = await supabase.from('admin_applications').select('id').eq('email', email);
+    if (existing.data && existing.data.length > 0) { statusEl.textContent = 'You already applied. Please wait for review.'; statusEl.className = 'status info'; return; }
+    await supabase.from('admin_applications').insert({ name: name, business_name: business, email: email, whatsapp: whatsapp, status: 'pending' });
+    sendEmail(CEO_EMAIL, '📋 New Administratorship Request from ' + name, '<p><strong>Name:</strong> ' + name + '</p><p><strong>Business:</strong> ' + business + '</p><p><strong>Email:</strong> ' + email + '</p><p><strong>WhatsApp:</strong> ' + whatsapp + '</p><p>Review in your admin dashboard.</p>');
+    statusEl.textContent = 'Request sent! Check your email for updates.'; statusEl.className = 'status success';
+    setTimeout(function() { renderLogin(); }, 2500);
+}
+
+// ============ DASHBOARD ============
+function renderDashboard() {
+    if (!currentUser) { renderLogin(); return; }
+    var isCEO = currentUser.isCEO;
+    var html = '';
+    html += '<div class="flex-between" style="margin-bottom:16px">';
+    html += '<h3>' + (viewingAdmin ? '👤 ' + viewingAdmin : '👑 Dashboard') + '</h3>';
+    html += '<div class="flex">';
+    if (viewingAdmin) { html += '<button class="btn-outline btn-sm" onclick="viewingAdmin=null;loadAllData().then(function(){renderDashboard();})">← Back to Partners</button>'; }
+    html += '<button class="btn-danger btn-sm" onclick="logout()">Logout</button></div></div>';
+    html += '<div class="card"><h4>Welcome, ' + (currentUser.email.split('@')[0]) + '</h4>';
+    html += '<span style="display:inline-block;padding:3px 12px;border-radius:20px;font-size:11px;font-weight:700;' + (isCEO ? 'background:#b87c4f;color:#fff' : 'background:#f5efe8;color:#b87c4f;border:1px solid #b87c4f') + '">' + (isCEO ? 'CEO · FULL ACCESS' : 'ADMINISTRATOR') + '</span></div>';
+
+    if (isCEO && !viewingAdmin) {
+        html += '<div class="card" style="cursor:pointer" onclick="renderAdminRequests()"><h4>📋 Administratorship Requests <span id="pending-badge" class="badge" style="float:right"></span></h4></div>';
+        html += '<div class="card" style="cursor:pointer" onclick="renderPartners()"><h4>👥 Abihani Express Partners</h4></div>';
+    }
+    html += '<div class="card" style="cursor:pointer" onclick="renderSettings()"><h4>⚙️ Settings</h4><p style="font-size:11px;color:#a6947e">Manage your details</p></div>';
+    html += '<div class="flex" style="margin-bottom:12px"><button class="btn-primary" onclick="renderAddProduct()">➕ Add Product</button><button class="btn-outline" onclick="renderAddCategory()">➕ Add Category</button></div>';
+    html += '<div class="card" style="cursor:pointer" onclick="renderAllProducts()"><h4>📦 All Products (' + allProducts.length + ')</h4><p style="font-size:11px;color:#a6947e">Tap to view, edit or delete</p></div>';
+    html += '<div class="card" style="cursor:pointer" onclick="renderCategoriesList()"><h4>📁 Categories (' + allCategories.length + ')</h4><p style="font-size:11px;color:#a6947e">Tap to browse categories</p></div>';
+    html += '<div class="card" style="cursor:pointer" onclick="renderEmailCenter()"><h4>✉️ Email Center</h4><p style="font-size:11px;color:#a6947e">' + (isCEO ? 'Send professional emails' : 'Send message to CEO or partners') + '</p></div>';
+    render(html);
+    if (isCEO && !viewingAdmin) {
+        supabase.from('admin_applications').select('*', { count: 'exact', head: true }).eq('status', 'pending').then(function(r) {
+            var badge = document.getElementById('pending-badge');
+            if (badge && r.count > 0) badge.textContent = r.count; else if (badge) badge.style.display = 'none';
+        });
+    }
+}
+
+// ============ CATEGORIES LIST (NEW - separate page) ============
+function renderCategoriesList() {
+    var html = '<div class="flex-between" style="margin-bottom:16px"><button class="btn-outline btn-sm" onclick="renderDashboard()">← Back</button><h3>📁 Categories (' + allCategories.length + ')</h3><span></span></div>';
+    if (allCategories.length === 0) {
+        html += '<p style="text-align:center;color:#a6947e;padding:30px">No categories yet</p>';
+    } else {
+        for (var i = 0; i < allCategories.length; i++) {
+            var cat = allCategories[i];
+            var subs = allSubcategories.filter(function(s) { return s.category_id == cat.id; });
+            html += '<div class="item-row" onclick="renderSubcategories(\'' + cat.id + '\')">';
+            html += '<span><strong>' + (cat.emoji || '📁') + ' ' + cat.name + '</strong> <small style="color:#a6947e">(' + subs.length + ' subs)</small></span>';
+            html += '<span onclick="event.stopPropagation()">';
+            html += '<button class="btn-outline btn-sm" onclick="editCategory(\'' + cat.id + '\')">✏️</button> ';
+            html += '<button class="btn-danger btn-sm" onclick="deleteCategory(\'' + cat.id + '\')">🗑️</button>';
+            if (currentUser.isCEO) {
+                html += ' <button class="btn-outline btn-sm" onclick="moveCatUp(' + i + ')">⬆️</button>';
+                html += ' <button class="btn-outline btn-sm" onclick="moveCatDown(' + i + ')">⬇️</button>';
+            }
+            html += '</span></div>';
+        }
+    }
+    render(html);
+}
+// ============ ADMIN REQUESTS ============
+function renderAdminRequests() {
+    var html = '<div class="flex-between" style="margin-bottom:16px"><button class="btn-outline btn-sm" onclick="renderDashboard()">← Back</button><h3>📋 Requests</h3><span></span></div>';
+    html += '<div class="tabs"><button class="tab active" onclick="loadRequestTab(\'pending\',this)">Pending</button><button class="tab" onclick="loadRequestTab(\'approved\',this)">Approved</button><button class="tab" onclick="loadRequestTab(\'rejected\',this)">Rejected</button></div>';
+    html += '<div id="request-content"><p style="text-align:center;color:#a6947e">Loading...</p></div>';
+    render(html);
+    loadRequestTab('pending', document.querySelector('.tab'));
+}
+
+async function loadRequestTab(status, btn) {
+    var tabs = document.querySelectorAll('.tab');
+    for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+    if (btn) btn.classList.add('active');
+    var container = document.getElementById('request-content');
+    container.innerHTML = '<p style="text-align:center;color:#a6947e">Loading...</p>';
+    var apps = await supabase.from('admin_applications').select('*').eq('status', status).order('created_at', { ascending: false });
+    var data = apps.data || [];
+    if (data.length === 0) { container.innerHTML = '<p style="text-align:center;color:#a6947e;padding:30px">Nothing here</p>'; return; }
+    var html = '';
+    for (var i = 0; i < data.length; i++) {
+        var a = data[i];
+        html += '<div class="card"><div class="flex-between"><div><strong>' + a.name + '</strong><br><small>' + a.email + '</small><br><small>' + a.business_name + ' | ' + a.whatsapp + '</small><br><small style="color:#a6947e">' + new Date(a.created_at).toLocaleDateString() + '</small></div>';
+        if (status === 'pending') { html += '<div class="flex"><button class="btn-green btn-sm" onclick="approveApp(\'' + a.id + '\')">✅ Approve</button><button class="btn-danger btn-sm" onclick="rejectApp(\'' + a.id + '\')">❌ Reject</button></div>'; }
+        if (status === 'rejected') { html += '<div><small style="color:#e74c3c">' + (a.reject_reason || 'No reason') + '</small></div>'; }
+        if (status === 'approved') { html += '<div><small style="color:#27ae60">Approved: ' + new Date(a.approved_at).toLocaleDateString() + '</small></div>'; }
+        html += '</div></div>';
+    }
+    container.innerHTML = html;
+}
+
+async function approveApp(id) {
+    var app = await supabase.from('admin_applications').select('*').eq('id', id).single();
+    if (!app.data) return;
+    var d = app.data;
+    var expiry = new Date(); expiry.setMonth(expiry.getMonth() + 12);
+    await supabase.from('admin_applications').update({ status: 'approved', approved_at: new Date().toISOString(), expiry_date: expiry.toISOString() }).eq('id', id);
+    await supabase.from('admins').insert({ email: d.email, password_hash: '', name: d.name, business_name: d.business_name, whatsapp: d.whatsapp, role: 'admin', status: 'pending_password', expiry_date: expiry.toISOString() });
+    sendEmail(d.email, 'Welcome to Abihani Express! 🎉', '<p>Dear ' + d.name + ',</p><p>Your application for <strong>' + d.business_name + '</strong> has been approved!</p><p>Go to Admin Login and click <strong>Create an account</strong> using your email.</p><p>Valid until: ' + expiry.toLocaleDateString() + '</p>');
+    sendEmail(CEO_EMAIL, 'New Admin Approved: ' + d.name, '<p>' + d.name + ' (' + d.business_name + ') has been approved as an administrator.</p>');
+    showToast('Approved! Email sent to ' + d.name, 'success');
+    loadRequestTab('pending', document.querySelector('.tab'));
+    loadAllData();
+}
+
+async function rejectApp(id) {
+    var reason = prompt('Reason for rejection:', 'Due to unconfirmed payment');
+    if (!reason) return;
+    var app = await supabase.from('admin_applications').select('*').eq('id', id).single();
+    if (!app.data) return;
+    await supabase.from('admin_applications').update({ status: 'rejected', reject_reason: reason, rejected_at: new Date().toISOString() }).eq('id', id);
+    sendEmail(app.data.email, 'Update on Your Application', '<p>Dear ' + app.data.name + ',</p><p>Your application was not approved this time.</p><p><strong>Reason:</strong> ' + reason + '</p>');
+    showToast('Rejected. Email sent.', 'info');
+    loadRequestTab('pending', document.querySelector('.tab'));
+}
+
+// ============ EXPRESS PARTNERS ============
+function renderPartners() {
+    var html = '<div class="flex-between" style="margin-bottom:16px"><button class="btn-outline btn-sm" onclick="renderDashboard()">← Back</button><h3>👥 Partners</h3><span></span></div>';
+    if (allPartners.length === 0) { html += '<p style="text-align:center;color:#a6947e;padding:30px">No partners yet</p>'; }
+    else {
+        for (var i = 0; i < allPartners.length; i++) {
+            var p = allPartners[i];
+            var isExpired = p.expiry_date && new Date(p.expiry_date) < new Date();
+            var isFrozen = p.status === 'frozen';
+            var statusText = isFrozen ? 'FROZEN' : (isExpired ? 'EXPIRED' : 'Active');
+            var statusColor = isFrozen ? '#2980b9' : (isExpired ? '#e74c3c' : '#27ae60');
+            var statusBg = isFrozen ? '#e8f0fe' : (isExpired ? '#fde8e8' : '#e8f8e8');
+            html += '<div class="card"><div class="flex-between" onclick="viewPartner(\'' + p.email + '\')" style="cursor:pointer"><div><strong>' + (p.business_name || p.email) + '</strong><br><small>' + p.email + ' | ' + (p.whatsapp || 'N/A') + '</small><br><small style="display:inline-block;padding:2px 8px;border-radius:10px;font-size:10px;background:' + statusBg + ';color:' + statusColor + '">' + statusText + '</small></div><span style="font-size:20px;color:#b87c4f">›</span></div>';
+            html += '<div class="flex" style="margin-top:8px" onclick="event.stopPropagation()">';
+            if (!isFrozen) { html += '<button class="btn-blue btn-sm" onclick="freezePartner(\'' + p.email + '\')">❄️ Freeze</button>'; }
+            else { html += '<button class="btn-green btn-sm" onclick="unfreezePartner(\'' + p.email + '\')">🌤️ Unfreeze</button>'; }
+            html += '<button class="btn-danger btn-sm" onclick="deletePartner(\'' + p.email + '\',\'' + (p.business_name || p.email).replace(/'/g,"\\'") + '\')">🗑️ Delete Store</button>';
+            html += '</div></div>';
+        }
+    }
+    render(html);
+}
+
+function viewPartner(email) { viewingAdmin = email; loadAllData().then(function() { renderDashboard(); }); }
+
+async function freezePartner(email) {
+    var reason = prompt('Reason for freezing (optional):', '');
+    await supabase.from('admins').update({ status: 'frozen', frozen_reason: reason || 'Account frozen by CEO' }).eq('email', email);
+    sendEmail(email, 'Your Account Status', '<p>Your account has been temporarily suspended.</p>' + (reason ? '<p><strong>Reason:</strong> ' + reason + '</p>' : '') + '<p>Contact us via WhatsApp: +2347067551684</p>');
+    showToast('Account frozen. Email sent.', 'info'); loadAllData().then(function() { renderPartners(); });
+}
+
+async function unfreezePartner(email) {
+    await supabase.from('admins').update({ status: 'active', frozen_reason: null }).eq('email', email);
+    sendEmail(email, 'Your Account Has Been Restored 🌤️', '<p>Your account has been restored. You may now log in.</p>');
+    showToast('Account unfrozen. Email sent.', 'success'); loadAllData().then(function() { renderPartners(); });
+}
+
+async function deletePartner(email, name) {
+    if (!confirm('Delete "' + name + '" and ALL their data? This is PERMANENT.')) return;
+    await supabase.from('products').delete().eq('owner_email', email);
+    await supabase.from('subcategories').delete().eq('owner_email', email);
+    await supabase.from('categories').delete().eq('owner_email', email);
+    await supabase.from('messages').delete().eq('to_admin_email', email);
+    await supabase.from('admin_applications').delete().eq('email', email);
+    await supabase.from('admins').delete().eq('email', email);
+    sendEmail(email, 'Your Store Has Been Removed', '<p>Your store on Abihani Express has been removed. Contact the CEO for more information.</p>');
+    showToast('Store deleted. Email sent.', 'success'); loadAllData().then(function() { renderPartners(); });
+}
+
+// ============ SETTINGS ============
+function renderSettings() {
+    var isCEO = currentUser.isCEO;
+    var html = '<h3>⚙️ Settings</h3>';
+    if (isCEO) {
+        html += '<label>New Password</label><input id="set-new-pass" type="password" placeholder="New Password">';
+        html += '<label>Confirm New Password</label><input id="set-confirm-pass" type="password" placeholder="Confirm New Password">';
+        html += '<button class="btn-primary" style="width:100%" onclick="saveCEOSettings()">Save</button>';
+    } else {
+        html += '<label>Business Name</label><input id="set-business" placeholder="Business Name">';
+        html += '<label>WhatsApp Number</label><input id="set-whatsapp" placeholder="WhatsApp Number">';
+        html += '<label>New Password</label><input id="set-new-pass" type="password" placeholder="New Password">';
+        html += '<label>Confirm New Password</label><input id="set-confirm-pass" type="password" placeholder="Confirm New Password">';
+        html += '<label>Current Password (required)</label><input id="set-current-pass" type="password" placeholder="Current Password">';
+        html += '<button class="btn-primary" style="width:100%" onclick="saveAdminSettings()">Save Changes</button>';
+    }
+    html += '<div id="settings-status" class="status"></div>';
+    openModal(html);
+    if (!isCEO) {
+        supabase.from('admins').select('*').eq('email', currentUser.email).single().then(function(r) {
+            if (r.data) { document.getElementById('set-business').value = r.data.business_name || ''; document.getElementById('set-whatsapp').value = r.data.whatsapp || ''; }
+        });
+    }
+}
+
+async function saveAdminSettings() {
+    var np = document.getElementById('set-new-pass').value;
+    var cp = document.getElementById('set-confirm-pass').value;
+    var cur = document.getElementById('set-current-pass').value;
+    var s = document.getElementById('settings-status');
+    if (!cur) { s.textContent = 'Current password required'; s.className = 'status error'; return; }
+    if (np && np !== cp) { s.textContent = 'Passwords do not match'; s.className = 'status error'; return; }
+    var admin = await supabase.from('admins').select('*').eq('email', currentUser.email).single();
+    if (!admin.data || admin.data.password_hash !== cur) { s.textContent = 'Wrong current password'; s.className = 'status error'; return; }
+    var updates = { business_name: document.getElementById('set-business').value.trim(), whatsapp: document.getElementById('set-whatsapp').value.trim() };
+    if (np) updates.password_hash = np;
+    await supabase.from('admins').update(updates).eq('email', currentUser.email);
+    s.textContent = 'Saved!'; s.className = 'status success'; setTimeout(closeModal, 1000);
+}
+
+async function saveCEOSettings() {
+    var np = document.getElementById('set-new-pass').value;
+    var cp = document.getElementById('set-confirm-pass').value;
+    var s = document.getElementById('settings-status');
+    if (!np) { s.textContent = 'Enter new password'; s.className = 'status error'; return; }
+    if (np !== cp) { s.textContent = 'Passwords do not match'; s.className = 'status error'; return; }
+    var r = await supabase.auth.updateUser({ password: np });
+    if (r.error) { s.textContent = r.error.message; s.className = 'status error'; return; }
+    s.textContent = 'Saved!'; s.className = 'status success'; setTimeout(closeModal, 1000);
+}
+
+// ============ ALL PRODUCTS ============
+function renderAllProducts() {
+    var html = '<div class="flex-between" style="margin-bottom:16px"><button class="btn-outline btn-sm" onclick="renderDashboard()">← Back</button><h3>📦 All Products (' + allProducts.length + ')</h3><span></span></div>';
+    if (allProducts.length === 0) { html += '<p style="text-align:center;color:#a6947e;padding:30px">No products yet</p>'; }
+    else {
+        for (var i = 0; i < allProducts.length; i++) {
+            var p = allProducts[i];
+            html += '<div class="item-row" onclick="renderEditProduct(\'' + p.id + '\')"><span>' + (p.image_url ? '<img src="' + p.image_url + '" style="width:40px;height:40px;object-fit:cover;border-radius:6px;margin-right:8px;vertical-align:middle">' : '<span style="font-size:24px;margin-right:8px;vertical-align:middle">' + (p.image_icon || '📦') + '</span>') + '<strong>' + p.name + '</strong><br><small style="color:#b87c4f">₦' + (p.price || 0).toLocaleString() + '</small> ' + (p.featured ? '<span style="color:#f39c12">⭐</span>' : '') + '</span><span style="font-size:20px;color:#b87c4f">›</span></div>';
+        }
+    }
+    render(html);
+}
+
+// ============ ADD PRODUCT ============
+function renderAddProduct() {
+    var catOpts = allCategories.map(function(c) { return '<option value="' + c.id + '">' + (c.emoji || '') + ' ' + c.name + '</option>'; }).join('');
+    var html = '<h3>➕ Add Product</h3>';
+    html += '<label>Product Name *</label><input id="ap-name" placeholder="Product Name">';
+    html += '<label>Price (₦) *</label><input id="ap-price" type="number" placeholder="Price">';
+    html += '<label>Category</label><select id="ap-category" onchange="updateAddSubcats()"><option value="">Category</option>' + catOpts + '</select>';
+    html += '<label>Subcategory</label><select id="ap-subcategory"><option value="">Subcategory (optional)</option></select>';
+    html += '<label>Description</label><textarea id="ap-desc" placeholder="Description" rows="2"></textarea>';
+    html += '<label>Rating</label><input id="ap-rating" type="number" step="0.1" placeholder="4.5">';
+    html += '<label>Stock Quantity</label><input id="ap-stock" type="number" placeholder="10">';
+    html += '<label>Discount %</label><input id="ap-discount" type="number" placeholder="0">';
+    html += '<label>Vendor</label><input id="ap-vendor" placeholder="Vendor">';
+    html += '<label>Location</label><input id="ap-location" placeholder="Location">';
+    html += '<label style="font-size:12px"><input type="checkbox" id="ap-featured"> Featured on homepage</label>';
+    html += '<label>Main Image</label><input type="file" id="ap-main-image" accept="image/*">';
+    html += '<label>Side Images</label><div id="ap-side-container"><input type="file" accept="image/*" class="ap-side-picker" style="font-size:12px"></div>';
+    html += '<button class="btn-outline btn-sm" style="margin-top:4px" onclick="addAddSidePicker()">+ Add Image</button>';
+    html += '<button class="btn-primary" style="width:100%;margin-top:12px" onclick="saveNewProduct()">💾 Save Product</button>';
+    openModal(html);
+    window.updateAddSubcats = function() {
+        var catId = document.getElementById('ap-category').value;
+        var sel = document.getElementById('ap-subcategory');
+        sel.innerHTML = '<option value="">Subcategory (optional)</option>';
+        allSubcategories.filter(function(s) { return s.category_id == catId; }).forEach(function(s) { sel.innerHTML += '<option value="' + s.id + '">' + s.name + '</option>'; });
+    };
+}
+
+function addAddSidePicker() {
+    var c = document.getElementById('ap-side-container');
+    var d = document.createElement('div'); d.style.marginTop = '4px';
+    d.innerHTML = '<input type="file" accept="image/*" class="ap-side-picker" style="font-size:12px">';
+    c.appendChild(d);
+}
+
+async function saveNewProduct() {
+    var name = document.getElementById('ap-name').value.trim();
+    var price = parseInt(document.getElementById('ap-price').value);
+    if (!name || !price) { showToast('Name and price required', 'error'); return; }
+    var ownerEmail = viewingAdmin || currentUser.email;
+    var mainUrl = '';
+    var mf = document.getElementById('ap-main-image').files[0];
+    if (mf) {
+        var ext = mf.name.split('.').pop();
+        var fn = 'products/' + Date.now() + '_main.' + ext;
+        var up = await supabase.storage.from('images').upload(fn, mf);
+        if (!up.error) mainUrl = supabase.storage.from('images').getPublicUrl(fn).data.publicUrl;
+    }
+    var extraUrls = [];
+    var pickers = document.querySelectorAll('.ap-side-picker');
+    for (var i = 0; i < pickers.length; i++) {
+        if (pickers[i].files && pickers[i].files[0]) {
+            var f = pickers[i].files[0]; var eext = f.name.split('.').pop();
+            var efn = 'products/' + Date.now() + '_' + i + '_extra.' + eext;
+            var eup = await supabase.storage.from('images').upload(efn, f);
+            if (!eup.error) extraUrls.push(supabase.storage.from('images').getPublicUrl(efn).data.publicUrl);
+        }
+    }
+    await supabase.from('products').insert({ name: name, price: price, category_id: document.getElementById('ap-category').value || null, subcategory_id: document.getElementById('ap-subcategory').value || null, description: document.getElementById('ap-desc').value.trim(), rating: parseFloat(document.getElementById('ap-rating').value) || 4.5, stock_quantity: parseInt(document.getElementById('ap-stock').value) || 10, discount_percent: parseInt(document.getElementById('ap-discount').value) || 0, vendor: document.getElementById('ap-vendor').value.trim() || 'Abihani Express', location: document.getElementById('ap-location').value.trim() || 'Potiskum, Yobe State', featured: document.getElementById('ap-featured').checked, image_url: mainUrl, image_urls: JSON.stringify(extraUrls), image_icon: '📦', owner_email: ownerEmail, owner_whatsapp: '', review_count: Math.floor(Math.random() * 235) + 12 });
+    closeModal(); showToast('Product added!', 'success'); loadAllData().then(function() { renderDashboard(); });
+}
+
+// ============ EDIT PRODUCT ============
+function renderEditProduct(id) {
+    var p = allProducts.find(function(x) { return x.id == id; }); if (!p) return;
+    var sideUrls = []; try { sideUrls = JSON.parse(p.image_urls || '[]'); } catch(e) {}
+    var catOpts = allCategories.map(function(c) { return '<option value="' + c.id + '"' + (c.id == p.category_id ? ' selected' : '') + '>' + (c.emoji || '') + ' ' + c.name + '</option>'; }).join('');
+    var html = '<h3>✏️ Edit Product</h3>';
+    html += '<label>Product Name</label><input id="ep-name" value="' + p.name + '">';
+    html += '<label>Price (₦)</label><input id="ep-price" type="number" value="' + p.price + '">';
+    html += '<label>Category</label><select id="ep-category" onchange="updateEditSubcats()">' + catOpts + '</select>';
+    html += '<label>Subcategory</label><select id="ep-subcategory"><option value="">None</option></select>';
+    html += '<label>Description</label><textarea id="ep-desc" rows="2">' + (p.description || '') + '</textarea>';
+    html += '<label>Rating</label><input id="ep-rating" type="number" step="0.1" value="' + (p.rating || 4.5) + '">';
+    html += '<label>Review Count</label><input id="ep-reviews" type="number" value="' + (p.review_count || 0) + '">';
+    html += '<label>Stock Quantity</label><input id="ep-stock" type="number" value="' + (p.stock_quantity || 10) + '">';
+    html += '<label>Discount %</label><input id="ep-discount" type="number" value="' + (p.discount_percent || 0) + '">';
+    html += '<label>Vendor</label><input id="ep-vendor" value="' + (p.vendor || '') + '">';
+    html += '<label>Location</label><input id="ep-location" value="' + (p.location || '') + '">';
+    html += '<label style="font-size:12px"><input type="checkbox" id="ep-featured" ' + (p.featured ? 'checked' : '') + '> Featured on homepage</label>';
+    if (p.image_url) { html += '<label>Current Main Image</label><div style="margin:4px 0"><img src="' + p.image_url + '" class="image-preview"><button class="btn-danger btn-sm" onclick="removeMainImage()">✕ Remove</button></div>'; }
+    html += '<label>New Main Image</label><input type="file" id="ep-main-image" accept="image/*"><input type="hidden" id="ep-image-removed" value="false">';
+    html += '<label>Side Images</label><div id="side-images-container">';
+    for (var i = 0; i < sideUrls.length; i++) { html += '<div class="side-row" data-index="' + i + '" style="display:flex;align-items:center;gap:8px;margin:4px 0"><img src="' + sideUrls[i] + '" class="image-preview"><button class="btn-danger btn-sm" onclick="removeSideRow(this)">✕</button></div>'; }
+    html += '</div><input type="hidden" id="side-removed" value="[]"><button class="btn-outline btn-sm" style="margin-top:4px" onclick="addSidePicker()">+ Add Image</button>';
+    html += '<div class="flex" style="margin-top:16px"><button class="btn-primary" style="flex:1" onclick="saveEditProduct(\'' + p.id + '\')">💾 Save Changes</button></div>';
+    html += '<button class="btn-danger" style="width:100%;margin-top:8px" onclick="deleteProductConfirm(\'' + p.id + '\',\'' + p.name.replace(/'/g,"\\'") + '\')">🗑️ Delete This Product</button>';
+    openModal(html);
+    window._editProduct = p; window._editSideUrls = sideUrls; window._editSideCounter = sideUrls.length;
+    window.updateEditSubcats = function() {
+        var catId = document.getElementById('ep-category').value;
+        var sel = document.getElementById('ep-subcategory'); sel.innerHTML = '<option value="">None</option>';
+        allSubcategories.filter(function(s) { return s.category_id == catId; }).forEach(function(s) { sel.innerHTML += '<option value="' + s.id + '"' + (s.id == p.subcategory_id ? ' selected' : '') + '>' + s.name + '</option>'; });
+    };
+    window.removeMainImage = function() { document.getElementById('ep-image-removed').value = 'true'; var pw = document.querySelector('#modal-content .image-preview'); if (pw && pw.parentElement) pw.parentElement.style.display = 'none'; };
+    setTimeout(function() { window.updateEditSubcats(); }, 100);
+}
+
+function addSidePicker() {
+    var c = document.getElementById('side-images-container');
+    var d = document.createElement('div'); d.style.cssText = 'display:flex;align-items:center;gap:8px;margin:4px 0';
+    d.innerHTML = '<input type="file" accept="image/*" class="side-picker" style="font-size:12px;flex:1"><button class="btn-danger btn-sm" onclick="removeSideRow(this)">✕</button>';
+    c.appendChild(d); window._editSideCounter++;
+}
+
+function removeSideRow(btn) {
+    var row = btn.parentElement; var idx = row.getAttribute('data-index');
+    if (idx !== null) { var removed = JSON.parse(document.getElementById('side-removed').value || '[]'); removed.push(parseInt(idx)); document.getElementById('side-removed').value = JSON.stringify(removed); }
+    row.remove();
+}
+
+async function saveEditProduct(id) {
+    var name = document.getElementById('ep-name').value.trim();
+    var price = parseInt(document.getElementById('ep-price').value);
+    if (!name || !price) { showToast('Name and price required', 'error'); return; }
+    var updates = { name: name, price: price, category_id: document.getElementById('ep-category').value || null, subcategory_id: document.getElementById('ep-subcategory').value || null, description: document.getElementById('ep-desc').value.trim(), rating: parseFloat(document.getElementById('ep-rating').value) || 4.5, review_count: parseInt(document.getElementById('ep-reviews').value) || 0, stock_quantity: parseInt(document.getElementById('ep-stock').value) || 10, discount_percent: parseInt(document.getElementById('ep-discount').value) || 0, vendor: document.getElementById('ep-vendor').value.trim(), location: document.getElementById('ep-location').value.trim(), featured: document.getElementById('ep-featured').checked };
+    var imgFile = document.getElementById('ep-main-image').files[0];
+    if (document.getElementById('ep-image-removed').value === 'true') { updates.image_url = ''; updates.image_icon = '📦'; }
+    if (imgFile) { var ext = imgFile.name.split('.').pop(); var fn = 'products/' + Date.now() + '_main.' + ext; var up = await supabase.storage.from('images').upload(fn, imgFile); if (!up.error) updates.image_url = supabase.storage.from('images').getPublicUrl(fn).data.publicUrl; }
+    var keptUrls = []; var removedIndices = JSON.parse(document.getElementById('side-removed').value || '[]');
+    for (var i = 0; i < window._editSideUrls.length; i++) { if (removedIndices.indexOf(i) === -1) keptUrls.push(window._editSideUrls[i]); }
+    var pickers = document.querySelectorAll('.side-picker');
+    for (var j = 0; j < pickers.length; j++) { if (pickers[j].files && pickers[j].files[0]) { var f = pickers[j].files[0]; var eext = f.name.split('.').pop(); var efn = 'products/' + Date.now() + '_' + j + '_extra.' + eext; var eup = await supabase.storage.from('images').upload(efn, f); if (!eup.error) keptUrls.push(supabase.storage.from('images').getPublicUrl(efn).data.publicUrl); } }
+    updates.image_urls = JSON.stringify(keptUrls);
+    await supabase.from('products').update(updates).eq('id', id);
+    closeModal(); showToast('Product updated!', 'success'); loadAllData().then(function() { renderAllProducts(); });
+}
+
+async function deleteProductConfirm(id, name) {
+    if (!confirm('Delete "' + name + '" permanently?')) return;
+    await supabase.from('products').delete().eq('id', id);
+    closeModal(); showToast('Product deleted', 'success'); loadAllData().then(function() { renderAllProducts(); });
+}
+
+// ============ CATEGORY CRUD ============
+function renderAddCategory() {
+    var html = '<h3>➕ Add Category</h3>';
+    html += '<label>Category Name</label><input id="ac-name" placeholder="Category Name">';
+    html += '<label>Emoji</label><input id="ac-emoji" placeholder="e.g. 👞">';
+    html += '<button class="btn-primary" style="width:100%" onclick="saveNewCategory()">Save Category</button>';
+    openModal(html);
+}
+async function saveNewCategory() {
+    var name = document.getElementById('ac-name').value.trim(); if (!name) { showToast('Name required', 'error'); return; }
+    await supabase.from('categories').insert({ name: name, emoji: document.getElementById('ac-emoji').value.trim() || '📁', sort_order: allCategories.length + 1, owner_email: viewingAdmin || currentUser.email });
+    closeModal(); showToast('Category added!', 'success'); loadAllData().then(function() { renderCategoriesList(); });
+}
+function editCategory(id) {
+    var cat = allCategories.find(function(c) { return c.id == id; }); if (!cat) return;
+    var html = '<h3>✏️ Edit Category</h3>';
+    html += '<label>Category Name</label><input id="ec-name" value="' + cat.name + '">';
+    html += '<label>Emoji</label><input id="ec-emoji" value="' + (cat.emoji || '') + '" placeholder="e.g. 👞">';
+    html += '<button class="btn-primary" style="width:100%" onclick="saveEditCategory(\'' + id + '\')">Update</button>';
+    openModal(html);
+}
+async function saveEditCategory(id) {
+    var name = document.getElementById('ec-name').value.trim(); if (!name) { showToast('Name required', 'error'); return; }
+    await supabase.from('categories').update({ name: name, emoji: document.getElementById('ec-emoji').value.trim() }).eq('id', id);
+    closeModal(); showToast('Category updated!', 'success'); loadAllData().then(function() { renderCategoriesList(); });
+}
+async function deleteCategory(id) {
+    var cat = allCategories.find(function(c) { return c.id == id; }); if (!cat) return;
+    if (!confirm('Delete "' + cat.name + '" and all its subcategories and products?')) return;
+    await supabase.from('categories').delete().eq('id', id);
+    showToast('Category deleted', 'success'); loadAllData().then(function() { renderCategoriesList(); });
+}
+async function moveCatUp(i) { if (i === 0) return; var a = allCategories[i], b = allCategories[i - 1]; await supabase.from('categories').update({ sort_order: b.sort_order }).eq('id', a.id); await supabase.from('categories').update({ sort_order: a.sort_order }).eq('id', b.id); loadAllData().then(function() { renderCategoriesList(); }); }
+async function moveCatDown(i) { if (i >= allCategories.length - 1) return; var a = allCategories[i], b = allCategories[i + 1]; await supabase.from('categories').update({ sort_order: b.sort_order }).eq('id', a.id); await supabase.from('categories').update({ sort_order: a.sort_order }).eq('id', b.id); loadAllData().then(function() { renderCategoriesList(); }); }
+
+// ============ SUBCATEGORIES ============
+function renderSubcategories(catId) {
+    var cat = allCategories.find(function(c) { return c.id == catId; }); if (!cat) return;
+    var subs = allSubcategories.filter(function(s) { return s.category_id == catId; });
+    var html = '<div class="flex-between" style="margin-bottom:16px"><button class="btn-outline btn-sm" onclick="renderCategoriesList()">← Back</button><h3>' + (cat.emoji || '') + ' ' + cat.name + '</h3><span></span></div>';
+    html += '<button class="btn-outline btn-sm" style="width:100%;margin-bottom:8px" onclick="renderAddSubcategory(\'' + catId + '\')">➕ Add Subcategory</button>';
+    if (subs.length === 0) { html += '<p style="text-align:center;color:#a6947e;padding:20px">No subcategories</p>'; }
+    else { for (var i = 0; i < subs.length; i++) { var sub = subs[i]; var prods = allProducts.filter(function(p) { return p.subcategory_id == sub.id; }); html += '<div class="item-row" onclick="renderSubProducts(\'' + sub.id + '\')"><span>📂 <strong>' + sub.name + '</strong> <small style="color:#a6947e">(' + prods.length + ' products)</small></span><span onclick="event.stopPropagation()"><button class="btn-outline btn-sm" onclick="editSubcategory(\'' + sub.id + '\')">✏️</button> <button class="btn-danger btn-sm" onclick="deleteSubcategory(\'' + sub.id + '\')">🗑️</button></span></div>'; } }
+    render(html);
+}
+function renderAddSubcategory(catId) { var html = '<h3>➕ Add Subcategory</h3><label>Subcategory Name</label><input id="as-name" placeholder="Subcategory Name"><button class="btn-primary" style="width:100%" onclick="saveNewSubcategory(\'' + catId + '\')">Save</button>'; openModal(html); }
+async function saveNewSubcategory(catId) { var name = document.getElementById('as-name').value.trim(); if (!name) { showToast('Name required', 'error'); return; } await supabase.from('subcategories').insert({ name: name, category_id: parseInt(catId), owner_email: viewingAdmin || currentUser.email }); closeModal(); showToast('Subcategory added!', 'success'); loadAllData().then(function() { renderSubcategories(catId); }); }
+function editSubcategory(id) { var sub = allSubcategories.find(function(s) { return s.id == id; }); if (!sub) return; var html = '<h3>✏️ Edit Subcategory</h3><label>Subcategory Name</label><input id="es-name" value="' + sub.name + '"><button class="btn-primary" style="width:100%" onclick="saveEditSubcategory(\'' + id + '\')">Update</button>'; openModal(html); }
+async function saveEditSubcategory(id) { var name = document.getElementById('es-name').value.trim(); if (!name) { showToast('Name required', 'error'); return; } var sub = allSubcategories.find(function(s) { return s.id == id; }); await supabase.from('subcategories').update({ name: name }).eq('id', id); closeModal(); showToast('Updated!', 'success'); loadAllData().then(function() { renderSubcategories(sub.category_id); }); }
+async function deleteSubcategory(id) { if (!confirm('Delete this subcategory and all its products?')) return; var sub = allSubcategories.find(function(s) { return s.id == id; }); await supabase.from('subcategories').delete().eq('id', id); showToast('Subcategory deleted', 'success'); loadAllData().then(function() { renderSubcategories(sub.category_id); }); }
+
+// ============ PRODUCTS UNDER SUBCATEGORY ============
+function renderSubProducts(subId) {
+    var sub = allSubcategories.find(function(s) { return s.id == subId; }); if (!sub) return;
+    var prods = allProducts.filter(function(p) { return p.subcategory_id == subId; });
+    var html = '<div class="flex-between" style="margin-bottom:16px"><button class="btn-outline btn-sm" onclick="renderSubcategories(\'' + sub.category_id + '\')">← Back</button><h3>📂 ' + sub.name + '</h3><span></span></div>';
+    if (prods.length === 0) { html += '<p style="text-align:center;color:#a6947e;padding:20px">No products here</p>'; }
+    else { for (var i = 0; i < prods.length; i++) { var p = prods[i]; html += '<div class="item-row" onclick="renderEditProduct(\'' + p.id + '\')"><span>' + (p.image_url ? '<img src="' + p.image_url + '" style="width:36px;height:36px;object-fit:cover;border-radius:4px;margin-right:8px;vertical-align:middle">' : '<span style="font-size:22px;margin-right:8px;vertical-align:middle">' + (p.image_icon || '📦') + '</span>') + '<strong>' + p.name + '</strong><br><small style="color:#b87c4f">₦' + (p.price || 0).toLocaleString() + '</small></span><span style="font-size:20px;color:#b87c4f">›</span></div>'; } }
+    render(html);
+}
+
+// ============ EMAIL CENTER ============
+function renderEmailCenter() {
+    var isCEO = currentUser.isCEO;
+    var html = '<h3>✉️ Email Center</h3>';
+    if (isCEO) {
+        html += '<div class="tabs"><button class="tab active" onclick="switchEmailTab(\'partner\',this)">Registered Partner</button><button class="tab" onclick="switchEmailTab(\'custom\',this)">Custom Email</button></div>';
+        html += '<div id="email-partner-section"><label>Search Partner</label><input id="partner-search-input" placeholder="Type business name..." oninput="filterPartnerDropdown()" autocomplete="off"><div class="dropdown-list" id="partner-dropdown"></div></div>';
+        html += '<div id="email-custom-section" style="display:none"><label>Recipient Email</label><input id="custom-recipient" type="email" placeholder="customer@example.com"></div>';
+    } else {
+        html += '<div class="tabs"><button class="tab active" onclick="switchEmailTab(\'partner\',this)">Registered Partner</button><button class="tab" onclick="switchEmailTab(\'ceo\',this)">Send to CEO</button></div>';
+        html += '<div id="email-partner-section"><label>Select Partner</label><div class="dropdown-list show" id="partner-dropdown"></div></div>';
+        html += '<div id="email-custom-section" style="display:none"><p style="font-size:12px;color:#a6947e">Message will be sent to the CEO</p></div>';
+    }
+    html += '<label>Subject</label><input id="email-subject" placeholder="Subject">';
+    html += '<label>Message</label><textarea id="email-message" placeholder="Message" rows="3"></textarea>';
+    html += '<button class="btn-primary" style="width:100%" onclick="sendCustomEmail()">📤 Send Email</button>';
+    html += '<div id="email-status" class="status"></div>';
+    openModal(html);
+    window._emailType = 'partner'; window._selectedPartner = null; loadPartnerDropdown();
+}
+
+function loadPartnerDropdown() {
+    var dd = document.getElementById('partner-dropdown'); if (!dd) return;
+    dd.innerHTML = '';
+    if (!currentUser.isCEO) { dd.innerHTML += '<div class="dropdown-item" onclick="selectPartner(\'bayeroisa2003@gmail.com\',\'Abihani Isa (CEO)\')">Abihani Isa (CEO) <small style="color:#a6947e">bayeroisa2003@gmail.com</small></div>'; }
+    for (var i = 0; i < allPartners.length; i++) { var p = allPartners[i]; dd.innerHTML += '<div class="dropdown-item" onclick="selectPartner(\'' + p.email + '\',\'' + (p.business_name || p.email).replace(/'/g,"\\'") + '\')">' + (p.business_name || p.email) + ' <small style="color:#a6947e">' + p.email + '</small></div>'; }
+    dd.classList.add('show');
+}
+
+function filterPartnerDropdown() {
+    var q = document.getElementById('partner-search-input').value.toLowerCase();
+    var dd = document.getElementById('partner-dropdown');
+    var items = dd.querySelectorAll('.dropdown-item');
+    for (var i = 0; i < items.length; i++) { items[i].style.display = items[i].textContent.toLowerCase().indexOf(q) !== -1 ? 'block' : 'none'; }
+    dd.classList.add('show');
+}
+
+function selectPartner(email, name) {
+    window._selectedPartner = email;
+    var si = document.getElementById('partner-search-input'); if (si) si.value = name + ' (' + email + ')';
+    document.getElementById('partner-dropdown').classList.remove('show');
+}
+
+function switchEmailTab(type, btn) {
+    window._emailType = type;
+    var tabs = document.querySelectorAll('.tab'); for (var i = 0; i < tabs.length; i++) tabs[i].classList.remove('active');
+    btn.classList.add('active');
+    var ps = document.getElementById('email-partner-section'); var cs = document.getElementById('email-custom-section');
+    if (type === 'partner') { ps.style.display = 'block'; cs.style.display = 'none'; } else { ps.style.display = 'none'; cs.style.display = 'block'; }
+}
+
+async function sendCustomEmail() {
+    var recipient;
+    if (window._emailType === 'partner') { recipient = window._selectedPartner; }
+    else if (window._emailType === 'ceo') { recipient = CEO_EMAIL; }
+    else { recipient = document.getElementById('custom-recipient').value.trim(); }
+    var subject = document.getElementById('email-subject').value.trim();
+    var message = document.getElementById('email-message').value.trim();
+    var statusEl = document.getElementById('email-status');
+    if (!recipient) { statusEl.textContent = 'Select or enter a recipient'; statusEl.className = 'status error'; return; }
+    if (!subject) { statusEl.textContent = 'Subject required'; statusEl.className = 'status error'; return; }
+    if (!message) { statusEl.textContent = 'Message required'; statusEl.className = 'status error'; return; }
+    statusEl.textContent = 'Sending...'; statusEl.className = 'status info';
+    var footer = currentUser.isCEO ? '<br><br><hr><p style="font-size:11px;color:#a6947e">Abihani Isa<br>Founder & CEO, Abihani Nig Ltd<br>www.abihaniexpress.com.ng</p>' : '';
+    var ok = await sendEmail(recipient, subject, '<p>' + message.replace(/\n/g, '<br>') + '</p>' + footer);
+    if (ok) { statusEl.textContent = 'Email sent! ✉️'; statusEl.className = 'status success'; document.getElementById('email-subject').value = ''; document.getElementById('email-message').value = ''; }
+    else { statusEl.textContent = 'Failed to send. Check console.'; statusEl.className = 'status error'; }
+}
+</script>
 </body>
 </html>
