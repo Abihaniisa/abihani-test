@@ -1375,6 +1375,23 @@ async function sendCustomEmail() {
     if (result) { if (statusEl) { statusEl.style.color = '#27ae60'; statusEl.textContent = CONFIG.UI_EMAIL_SENT; } document.getElementById('email-subject').value = ''; document.getElementById('email-message').value = ''; }
     else { if (statusEl) { statusEl.style.color = '#e74c3c'; statusEl.textContent = 'Failed to send.'; } }
 }
+// ============ EMAIL SENDER ============
+async function sendEmail(to, subject, html) {
+    try {
+        var response = await fetch('/api/send-email', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ to: to, subject: subject, html: html })
+        });
+        if (response.ok) return true;
+        var errData = await response.json().catch(function() { return {}; });
+        console.error('Email API error:', errData);
+        return false;
+    } catch (err) {
+        console.error('Email send error:', err);
+        return false;
+    }
+}
 
 // ============ EXPOSE PART 2 ============
 window.showAddProductForm = showAddProductForm; window.saveNewProduct = saveNewProduct;
