@@ -14,7 +14,7 @@ export default async function handler(req, res) {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'Authorization': 'Bearer ' + process.env.RESEND_API_KEY
+                'Authorization': 'Bearer re_gwvYG6oG_7GbFqxZTBcSQ8gdjYUCFHjQi'
             },
             body: JSON.stringify({
                 from: 'Abihani Express <support@abihaniexpress.com.ng>',
